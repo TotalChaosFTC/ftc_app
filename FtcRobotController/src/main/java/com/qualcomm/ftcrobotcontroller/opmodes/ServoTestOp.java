@@ -32,65 +32,36 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 /**
  * TeleOp Mode
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class TestEncoder extends OpMode {
-    DcMotor motorRight;
-    DcMotor motorLeft;
+public class ServoTestOp extends OpMode {
 
-    final static int ENCODER_CPR = 1120;
-    final static double GEAR_RATIO = 1;
-    final static int WHEEL_DIAMETER = 4;
-    final static int DISTANCE = 24;
+  Servo arm;
+  double armDelta = 0.01;
+  double armPosition;
 
-    final static double CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
-    final static double  ROTATIONS = DISTANCE / CIRCUMFERENCE;
-    final static double COUNTS = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
-    @Override
-
-    public void init() {
-        motorRight = hardwareMap.dcMotor.get("motor_2");
-        motorLeft = hardwareMap.dcMotor.get("motor_1");
-
-        //motorRight.setDirection(DcMotor.Direction.REVERSE);
-        motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-    }
-
-    @Override
-    public void start ()
-    {
-    }
-
-    @Override
-    public void loop()
-    {
-        if( motorLeft.getCurrentPosition() == 0 &&
-                motorRight.getCurrentPosition() == 0 ) {
-            motorLeft.setTargetPosition((int)COUNTS);
-            motorRight.setTargetPosition((int)COUNTS);
-            motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-            motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-            motorLeft.setPower(0.5);
-            motorRight.setPower(0.5);
-
-        }
-        else
-        telemetry.addData("Motor Target", COUNTS);
-        telemetry.addData("left motor position", motorLeft.getCurrentPosition());
-        telemetry.addData("right motor position",motorRight.getCurrentPosition() );
-    }
+  /*
+   * Code to run when the op mode is first enabled goes here
+   * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
+   */
+  @Override
+  public void init() {
+    arm = hardwareMap.servo.get("ServoArm");
+    armPosition = 0;
+    arm.setPosition(0);
+  }
 
 
-    @Override
-    public void stop()
-    {
-    }
+  @Override
+  public void loop() {
+    armPosition += gamepad1.left_stick_y * armDelta;
+    armPosition = Range.clip(armPosition, 0, 1);
+    arm.setPosition(armPosition);
+  }
 }
-

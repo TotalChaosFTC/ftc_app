@@ -40,10 +40,13 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class TestEncoder extends OpMode {
+public class MotorSync extends OpMode {
     DcMotor motorRight;
     DcMotor motorLeft;
-
+    double powerLeft = 0.5;
+    double powerRight = 0.5;
+    double currentLeft = COUNTS;
+    double currentRights = COUNTS;
     final static int ENCODER_CPR = 1120;
     final static double GEAR_RATIO = 1;
     final static int WHEEL_DIAMETER = 4;
@@ -61,6 +64,7 @@ public class TestEncoder extends OpMode {
         //motorRight.setDirection(DcMotor.Direction.REVERSE);
         motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+
     }
 
     @Override
@@ -79,9 +83,8 @@ public class TestEncoder extends OpMode {
             motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
             motorLeft.setPower(0.5);
             motorRight.setPower(0.5);
-
         }
-        else
+
         telemetry.addData("Motor Target", COUNTS);
         telemetry.addData("left motor position", motorLeft.getCurrentPosition());
         telemetry.addData("right motor position",motorRight.getCurrentPosition() );
