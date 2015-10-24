@@ -33,101 +33,77 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 
 /**
  * TeleOp Mode
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class TankRobotOp extends OpMode {
+public class MeasureEncoder extends OpMode {
     DcMotor motorRight;
     DcMotor motorLeft;
     DcMotor motorRight2;
     DcMotor motorLeft2;
     DcMotor motorRight3;
     DcMotor motorLeft3;
-    final static double FAST = 1.0;
-    final static double MED_FAST = 0.75;
-    final static double MEDIUM = 0.5;
-    final static double SLOW = 0.25;
-    double mode = FAST;
-    public void init()
-    {
+
+
+    final static int ENCODER_CPR = 1120;
+    final static double GEAR_RATIO = 1;
+    final static int WHEEL_DIAMETER = 4;
+    final static int DISTANCE = 24;
+
+    final static double CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
+    final static double  ROTATIONS = DISTANCE / CIRCUMFERENCE;
+    final static double COUNTS = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
+    @Override
+
+    public void init() {
         motorRight = hardwareMap.dcMotor.get("motor_1");
         motorLeft = hardwareMap.dcMotor.get("motor_2");
         motorRight2 = hardwareMap.dcMotor.get("motor_3");
         motorLeft2 = hardwareMap.dcMotor.get("motor_4");
         motorRight3 = hardwareMap.dcMotor.get("motor_5");
         motorLeft3 = hardwareMap.dcMotor.get("motor_6");
+
+        //motorRight.setDirection(DcMotor.Direction.REVERSE);
+        motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+
         motorRight.setDirection(DcMotor.Direction.REVERSE);
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
         motorLeft3.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
+    public void start ()
+    {
+    }
+
+    @Override
     public void loop()
     {
-        // When dpad is pushed up increase one mode
-        //When dpad is pushed down decrease by one mode
-        if (gamepad1.dpad_up) {
-            mode= mode + 0.25;
+        if( motorLeft.getCurrentPosition() == 0 &&
+                motorRight.getCurrentPosition() == 0 ) {
+            motorLeft.setTargetPosition((int)COUNTS);
+            motorRight.setTargetPosition((int)COUNTS);
+            motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+            motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+            motorLeft.setPower(0.5);
+            motorRight.setPower(0.5);
+
         }
-
-        if (gamepad1.dpad_down) {
-            mode -= 0.25;
-        }
-        mode = Range.clip(mode, 0.25, 1 );
-
-        // when leftstick is pushed up move forward
-        //when rightstick is pushed down move backwards
-        double left = gamepad1.left_stick_y;
-        double right= gamepad1.right_stick_y;
-
-        right = (double)scaleInput(right);
-        left =  (double)scaleInput(left);
-
-        right= Range.clip(right, -mode, mode);
-        left= Range.clip(left, -mode, mode);
-
-        motorRight.setPower(right);
-        motorLeft.setPower(left);
-        motorRight2.setPower(right);
-        motorLeft2.setPower(left);
-        motorRight3.setPower(right);
-        motorLeft3.setPower(left);
-
-        telemetry.addData("Text", "*** Robot Data***");
-        telemetry.addData("left tgt pwr", "left  pwr: " + String.format("%.2f", left));
-        telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+        else
+        telemetry.addData("Motor Target", COUNTS);
+        telemetry.addData("left motors position", motorLeft.getCurrentPosition());
+        telemetry.addData("right motors position",motorRight.getCurrentPosition() );
     }
 
 
     @Override
     public void stop()
     {
-    }
-    double scaleInput(double dVal)  {
-        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
-
-        // get the corresponding index for the scaleInput array.
-        int index = (int) (dVal * 16.0);
-        if (index < 0) {
-            index = -index;
-        }
-        if (index > 16) {
-            index = 16;
-        }
-
-        double dScale = 0.0;
-        if (dVal < 0) {
-            dScale = -scaleArray[index];
-        } else {
-            dScale = scaleArray[index];
-        }
-
-        return dScale * mode;
     }
 }
 
