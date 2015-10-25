@@ -41,6 +41,8 @@ import com.qualcomm.robotcore.util.Range;
  *Enables control of the robot via the gamepad
  */
 public class TankRobotOp extends OpMode {
+    boolean iSawDpadUpAlready = false;
+    boolean iSawDpadDownAlready = false;
     DcMotor motorRight;
     DcMotor motorLeft;
     DcMotor motorRight2;
@@ -71,11 +73,23 @@ public class TankRobotOp extends OpMode {
         // When dpad is pushed up increase one mode
         //When dpad is pushed down decrease by one mode
         if (gamepad1.dpad_up) {
-            mode= mode + 0.25;
+            if(!iSawDpadUpAlready) {
+                iSawDpadUpAlready = true;
+                mode = mode + 0.25;
+            }
+        }
+        else {
+            iSawDpadUpAlready = false;
         }
 
         if (gamepad1.dpad_down) {
-            mode -= 0.25;
+            if(!iSawDpadDownAlready) {
+                iSawDpadDownAlready = true;
+                mode = mode - 0.25;
+            }
+        }
+        else {
+            iSawDpadDownAlready = false;
         }
         mode = Range.clip(mode, 0.25, 1 );
 
