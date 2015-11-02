@@ -48,11 +48,13 @@ public class MeasureEncoder extends OpMode {
     DcMotor motorRight3;
     DcMotor motorLeft3;
 
-
+    boolean aButtonPressed = false;
+    boolean bButtonPressed  = false;
+    boolean xButtonPressed  = false;
     final static int ENCODER_CPR = 1120;
     final static double GEAR_RATIO = 1;
     final static int WHEEL_DIAMETER = 4;
-    final static int DISTANCE = 20;
+    final static int DISTANCE = 100;
 
     final static double CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
     final static double  ROTATIONS = DISTANCE / CIRCUMFERENCE;
@@ -68,8 +70,7 @@ public class MeasureEncoder extends OpMode {
         motorLeft3 = hardwareMap.dcMotor.get("motor_6");
 
         //motorRight.setDirection(DcMotor.Direction.REVERSE);
-        motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+
 
         motorRight.setDirection(DcMotor.Direction.REVERSE);
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
@@ -84,22 +85,68 @@ public class MeasureEncoder extends OpMode {
     @Override
     public void loop()
     {
-        if( motorLeft.getCurrentPosition() == 0 &&
-                motorRight.getCurrentPosition() == 0 ) {
-            motorLeft.setTargetPosition((int)COUNTS);
-            motorRight.setTargetPosition((int)COUNTS);
-            motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-            motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-            motorLeft.setPower(0.5);
-            motorRight.setPower(0.5);
-
+        if (gamepad1.a) {
+            resetEncoders();
+            aButtonPressed = true;
         }
-        else
-        telemetry.addData("Motor Target", COUNTS);
-        telemetry.addData("left motors position", motorLeft.getCurrentPosition());
-        telemetry.addData("right motors position",motorRight.getCurrentPosition() );
+        if( aButtonPressed ) {
+            if( waitForResetEncoders() ) {
+                turn(200);
+                aButtonPressed = false;
+            }
+        }
+        if (gamepad1.b) {
+            resetEncoders();
+            bButtonPressed = true;
+        }
+        if( bButtonPressed ) {
+            if( waitForResetEncoders() ) {
+                turn(100);
+                bButtonPressed = false;
+            }
+        }
+        if (gamepad1.x) {
+            resetEncoders();
+            xButtonPressed = true;
+        }
+        if (xButtonPressed) {
+            if( waitForResetEncoders() ) {
+                move(100);
+                xButtonPressed = false;
+            }
+        }
+
+            telemetry.addData("Motor Target", COUNTS);
+            telemetry.addData("left motors position", motorLeft.getCurrentPosition());
+            telemetry.addData("right motors position",motorRight.getCurrentPosition() );
     }
 
+    public void resetEncoders() {
+        motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    }
+
+    public boolean waitForResetEncoders() {
+        return motorLeft.getCurrentPosition() == 0 &&
+                motorRight.getCurrentPosition() == 0;
+    }
+
+    public void turn(int counts) {
+        motorLeft.setTargetPosition((int)counts);
+        motorRight.setTargetPosition((int)-counts);
+        motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft.setPower(0.5);
+        motorRight.setPower(-0.5);
+    }
+    public void move(int counts) {
+        motorLeft.setTargetPosition((int)counts);
+        motorRight.setTargetPosition((int)counts);
+        motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft.setPower(0.5);
+        motorRight.setPower(0.5);
+    }
 
     @Override
     public void stop()

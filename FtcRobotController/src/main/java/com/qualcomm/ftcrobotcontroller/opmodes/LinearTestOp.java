@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -50,7 +51,14 @@ public class LinearTestOp extends LinearOpMode {
   DcMotor motorLeft2;
   DcMotor motorRight3;
   DcMotor motorLeft3;
-  // Servo arm;
+    final static int ENCODER_CPR = 1120;
+    final static double GEAR_RATIO = 1;
+    final static int WHEEL_DIAMETER = 4;
+    final static int DISTANCE = 100;
+
+    final static double CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
+
+    // Servo arm;
   // double armDelta = 0.01;
   // double armPosition;
 
@@ -71,14 +79,31 @@ public class LinearTestOp extends LinearOpMode {
         motorLeft3.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
+        double currentTime = getRuntime();
+        double endTime = currentTime + 30;
+        while (getRuntime() < endTime) {
+            if (gamepad1.a) {
+                double  ROTATIONS = 4 / CIRCUMFERENCE;
+                double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
+                turn((int) counts);
+            }
 
-        for(int i=0; i<4; i++) {
-            setMotorPower(1.0, 1.0);
-            sleep(1000);
+            if (gamepad1.x) {
+                double  ROTATIONS = 4 / CIRCUMFERENCE;
+                double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
+                move((int) counts);
+            }
 
-           setMotorPower(0.5, -0.5);
+            if (gamepad1.b) {
+                double  ROTATIONS = 2 / CIRCUMFERENCE;
+                double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
+                turn((int) counts);
+            }
 
-            sleep(500);
+            if (gamepad1.y) {
+                double  ROTATIONS = 2 / CIRCUMFERENCE;
+                double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
+                move((int) counts);            }
         }
 
       //  leftMotor.setPowerFloat();
@@ -87,6 +112,48 @@ public class LinearTestOp extends LinearOpMode {
 
     }
   }
+    public void resetEncoders() {
+        motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    }
+
+    public boolean waitForResetEncoders() {
+        return motorLeft.getCurrentPosition() == 0 &&
+                motorRight.getCurrentPosition() == 0;
+    }
+
+    public void turn(int counts) {
+        resetEncoders();
+        while( !waitForResetEncoders() ) {
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        motorLeft.setTargetPosition((int)counts);
+        motorRight.setTargetPosition((int)-counts);
+        motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft.setPower(0.5);
+        motorRight.setPower(-0.5);
+    }
+    public void move(int counts) {
+        resetEncoders();
+        while( !waitForResetEncoders() ) {
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        motorLeft.setTargetPosition((int)counts);
+        motorRight.setTargetPosition((int)counts);
+        motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft.setPower(0.5);
+        motorRight.setPower(0.5);
+    }
     public void setMotorPower(double rightPower,double leftPower){
         motorLeft.setPower(leftPower);
         motorRight.setPower(rightPower);
