@@ -100,5 +100,6 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register ("LinearTestOp", LinearTestOp.class);
     manager.register ("PulleyArmOp", PulleyArmOp.class);
     manager.register ("ContinuousServoTestOp", ContinuousServoTestOp.class);
+    manager.register ("MeasureEncoder", MeasureEncoder.class);
   }
 }

@@ -80,7 +80,7 @@ public class LinearTestOp extends LinearOpMode {
 
         waitForStart();
         double currentTime = getRuntime();
-        double endTime = currentTime + 30;
+        double endTime = currentTime + 50000;
         while (getRuntime() < endTime) {
             if (gamepad1.a) {
                 double  ROTATIONS = 4 / CIRCUMFERENCE;
@@ -135,8 +135,7 @@ public class LinearTestOp extends LinearOpMode {
         motorRight.setTargetPosition((int)-counts);
         motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft.setPower(0.5);
-        motorRight.setPower(-0.5);
+        setMotorPower(1.0, -1.0);
     }
     public void move(int counts) {
         resetEncoders();
@@ -151,8 +150,7 @@ public class LinearTestOp extends LinearOpMode {
         motorRight.setTargetPosition((int)counts);
         motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft.setPower(0.5);
-        motorRight.setPower(0.5);
+        setMotorPower(1.0, 1.0);
     }
     public void setMotorPower(double rightPower,double leftPower){
         motorLeft.setPower(leftPower);

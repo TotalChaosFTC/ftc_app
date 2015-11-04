@@ -136,16 +136,16 @@ public class MeasureEncoder extends OpMode {
         motorRight.setTargetPosition((int)-counts);
         motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft.setPower(0.5);
-        motorRight.setPower(-0.5);
+        motorLeft.setPower(1);
+        motorRight.setPower(-1);
     }
     public void move(int counts) {
         motorLeft.setTargetPosition((int)counts);
         motorRight.setTargetPosition((int)counts);
         motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft.setPower(0.5);
-        motorRight.setPower(0.5);
+        motorLeft.setPower(1);
+        motorRight.setPower(1);
     }
 
     @Override
