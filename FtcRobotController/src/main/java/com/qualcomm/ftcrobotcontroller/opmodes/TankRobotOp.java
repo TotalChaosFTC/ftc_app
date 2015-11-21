@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -41,14 +42,19 @@ import com.qualcomm.robotcore.util.Range;
  *Enables control of the robot via the gamepad
  */
 public class TankRobotOp extends OpMode {
+    double armDelta = 0.01;
+    double armPosition;
     boolean iSawDpadUpAlready = false;
     boolean iSawDpadDownAlready = false;
-    DcMotor motorRight;
-    DcMotor motorLeft;
-    DcMotor motorRight2;
-    DcMotor motorLeft2;
-    DcMotor motorRight3;
-    DcMotor motorLeft3;
+    DcMotor leftFront;
+    DcMotor rightFront;
+    DcMotor leftBack;
+    DcMotor rightBack;
+    DcMotor armTwist;
+    DcMotor armLift;
+    DcMotor frontSweeper;
+    Servo ClickerRight;
+    Servo ClickerLeft;
     final static double FAST = 1.0;
     final static double MED_FAST = 0.75;
     final static double MEDIUM = 0.5;
@@ -56,15 +62,17 @@ public class TankRobotOp extends OpMode {
     double mode = FAST;
     public void init()
     {
-        motorRight = hardwareMap.dcMotor.get("motor_1");
-        motorLeft = hardwareMap.dcMotor.get("motor_2");
-        motorRight2 = hardwareMap.dcMotor.get("motor_3");
-        motorLeft2 = hardwareMap.dcMotor.get("motor_4");
-        motorRight3 = hardwareMap.dcMotor.get("motor_5");
-        motorLeft3 = hardwareMap.dcMotor.get("motor_6");
-        motorRight.setDirection(DcMotor.Direction.REVERSE);
-        motorRight2.setDirection(DcMotor.Direction.REVERSE);
-        motorLeft3.setDirection(DcMotor.Direction.REVERSE);
+        leftFront = hardwareMap.dcMotor.get("motor_1");
+        rightFront = hardwareMap.dcMotor.get("motor_2");
+        leftBack = hardwareMap.dcMotor.get("motor_3");
+        rightBack = hardwareMap.dcMotor.get("motor_4");
+        armTwist = hardwareMap.dcMotor.get("motor_5");
+        armLift = hardwareMap.dcMotor.get("motor_6");
+        frontSweeper = hardwareMap.dcMotor.get("motor_7");
+        ClickerLeft = hardwareMap.servo.get("servo1");
+        ClickerRight = hardwareMap.servo.get("servo2");
+        leftBack.setDirection(DcMotor.Direction.REVERSE);
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
@@ -72,7 +80,7 @@ public class TankRobotOp extends OpMode {
     {
         // When dpad is pushed up increase one mode
         //When dpad is pushed down decrease by one mode
-        if (gamepad1.dpad_up) {
+        if (gamepad2.dpad_up) {
             if(!iSawDpadUpAlready) {
                 iSawDpadUpAlready = true;
                 mode = mode + 0.25;
@@ -82,7 +90,7 @@ public class TankRobotOp extends OpMode {
             iSawDpadUpAlready = false;
         }
 
-        if (gamepad1.dpad_down) {
+        if (gamepad2.dpad_down) {
             if(!iSawDpadDownAlready) {
                 iSawDpadDownAlready = true;
                 mode = mode - 0.25;
@@ -93,10 +101,43 @@ public class TankRobotOp extends OpMode {
         }
         mode = Range.clip(mode, 0.25, 1 );
 
+        if (gamepad2.left_bumper){
+            armPosition += -1 * armDelta;
+            armPosition = Range.clip(armPosition, -1, 0);
+            ClickerLeft.setPosition(armPosition);
+        }
+        if (gamepad2.right_bumper){
+            armPosition += 1 * armDelta;
+            armPosition = Range.clip(armPosition, 0 , 1);
+            ClickerLeft.setPosition(armPosition);
+        }
+
+        if (gamepad2.left_trigger > 0){
+            armPosition += -1 * armDelta;
+            armPosition = Range.clip(armPosition, -1, 0);
+            ClickerRight.setPosition(armPosition);
+        }
+        if (gamepad2.right_trigger > 0){
+            armPosition += 1 * armDelta;
+            armPosition = Range.clip(armPosition, 0, 1);
+            ClickerRight.setPosition(armPosition);
+        }
+
+        if (armPosition > 1 ){
+            armPosition = 1;
+        }
+        if (armPosition < 0 ){
+            armPosition = 0;
+        }
         // when leftstick is pushed up move forward
         //when rightstick is pushed down move backwards
         double left = gamepad1.left_stick_y;
         double right= gamepad1.right_stick_y;
+        double sweeper = -gamepad1.right_trigger;
+
+        double up = gamepad2.left_stick_y;
+        double forward = gamepad2.right_stick_y;
+
 
         right = (double)scaleInput(right);
         left =  (double)scaleInput(left);
@@ -104,12 +145,15 @@ public class TankRobotOp extends OpMode {
         right= Range.clip(right, -mode, mode);
         left= Range.clip(left, -mode, mode);
 
-        motorRight.setPower(right);
-        motorLeft.setPower(left);
-        motorRight2.setPower(right);
-        motorLeft2.setPower(left);
-        motorRight3.setPower(right);
-        motorLeft3.setPower(left);
+        forward= Range.clip(forward, -1, 1);
+        up= Range.clip(up, -1, 1);
+        frontSweeper.setPower(sweeper);
+        armLift.setPower(up);
+        armTwist.setPower(forward);
+        leftFront.setPower(left);
+        leftBack.setPower(left);
+        rightFront.setPower(right);
+        rightBack.setPower(right);
 
         telemetry.addData("Text", "*** Robot Data***");
         telemetry.addData("left tgt pwr", "left  pwr: " + String.format("%.2f", left));
