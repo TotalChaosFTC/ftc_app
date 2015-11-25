@@ -40,13 +40,11 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class MeasureEncoder extends OpMode {
+public class MeasureEncoderDebug extends OpMode {
     DcMotor motorRight;
     DcMotor motorLeft;
     DcMotor motorRight2;
     DcMotor motorLeft2;
-    DcMotor motorRight3;
-    DcMotor motorLeft3;
 
     boolean aButtonPressed = false;
     boolean bButtonPressed  = false;
@@ -62,19 +60,16 @@ public class MeasureEncoder extends OpMode {
     @Override
 
     public void init() {
-        motorRight = hardwareMap.dcMotor.get("motor_1");
-        motorLeft = hardwareMap.dcMotor.get("motor_2");
-        motorRight2 = hardwareMap.dcMotor.get("motor_3");
-        motorLeft2 = hardwareMap.dcMotor.get("motor_4");
-        motorRight3 = hardwareMap.dcMotor.get("motor_5");
-        motorLeft3 = hardwareMap.dcMotor.get("motor_6");
+        motorLeft = hardwareMap.dcMotor.get("motor_1");
+        motorRight = hardwareMap.dcMotor.get("motor_2");
+        motorLeft2 = hardwareMap.dcMotor.get("motor_3");
+        motorRight2 = hardwareMap.dcMotor.get("motor_4");
 
         //motorRight.setDirection(DcMotor.Direction.REVERSE);
 
 
         motorRight.setDirection(DcMotor.Direction.REVERSE);
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
-        motorLeft3.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
@@ -140,25 +135,18 @@ public class MeasureEncoder extends OpMode {
         motorRight2.setTargetPosition((int) -counts);
         motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft3.setTargetPosition((int) counts);
-        motorRight3.setTargetPosition((int) -counts);
-        motorLeft3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+
         setMotorPower(1, -1);
     }
     public void move(int counts) {
         motorLeft.setTargetPosition((int)counts);
-        motorRight.setTargetPosition((int) -counts);
+        motorRight.setTargetPosition((int) counts);
         motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorLeft2.setTargetPosition((int) counts);
-        motorRight2.setTargetPosition((int) -counts);
+        motorRight2.setTargetPosition((int) counts);
         motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft3.setTargetPosition((int) counts);
-        motorRight3.setTargetPosition((int) -counts);
-        motorLeft3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         setMotorPower(1, 1);
     }
 
@@ -167,9 +155,8 @@ public class MeasureEncoder extends OpMode {
         motorRight.setPower(rightPower);
         motorLeft2.setPower(leftPower);
         motorRight2.setPower(rightPower);
-        motorLeft3.setPower(leftPower);
-        motorRight3.setPower(rightPower);
-    }
+
+        }
 
     @Override
     public void stop()

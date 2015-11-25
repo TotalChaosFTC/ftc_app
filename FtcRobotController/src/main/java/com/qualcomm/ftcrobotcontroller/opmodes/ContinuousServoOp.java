@@ -41,11 +41,9 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class ContinuousServoTestOp extends OpMode {
+public class ContinuousServoOp extends OpMode {
 
-  Servo sweeper;
-  double sweeperPosition = 0.0;
-  double armDelta = 0.01;
+  DcMotor sweeper;
   boolean runServo = false;
 
   /*
@@ -54,28 +52,17 @@ public class ContinuousServoTestOp extends OpMode {
    */
   @Override
   public void init() {
-    sweeper = hardwareMap.servo.get("ServoSweeper");
+
+    sweeper = hardwareMap.dcMotor.get("Sweeper");
   }
 
 
   @Override
   public void loop() {
-    sweeperPosition += gamepad2.left_stick_y * armDelta;
+    float sweeperPower  = gamepad2.left_stick_y;
+    sweeper.setPower(sweeperPower);
+    sweeperPower = Range.clip( sweeperPower, -1, 1);
 
-    if (sweeperPosition >= 1.0){
-      sweeperPosition -= 1.0;
-    }
-    if (sweeperPosition < 0){
-      sweeperPosition += 1.0;
-    }
-    if (gamepad2.left_stick_y>0) {
-      runServo = true;
-    }
-    if (runServo = true) {
-      sweeper.setPosition(sweeperPosition);
-    }
-    else {
-      sweeper.setPosition(sweeperPosition);
-    }
+
   }
 }

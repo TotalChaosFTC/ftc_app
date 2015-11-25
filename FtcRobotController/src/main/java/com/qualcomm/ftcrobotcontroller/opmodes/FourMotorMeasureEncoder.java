@@ -1,4 +1,4 @@
-/* Copyright (c) 2015 Qualcomm Technologies Inc
+/* Copyright (c) 2014, 2015 Qualcomm Technologies Inc
 
 All rights reserved.
 
@@ -31,65 +31,84 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
 /**
- * Linear Tele Op Mode
+ * TeleOp Mode
  * <p>
- * Enables control of the robot via the gamepad.
- * NOTE: This op mode will not work with the NXT Motor Controllers. Use an Nxt op mode instead.
+ *Enables control of the robot via the gamepad
  */
-
-public class League0AutoOp extends LinearOpMode {
-    DcMotor leftFront;
+public class FourMotorMeasureEncoder extends OpMode {
     DcMotor rightFront;
-    DcMotor leftBack;
+    DcMotor leftFront;
     DcMotor rightBack;
-    DcMotor armTwist;
-    DcMotor armLift;
+    DcMotor leftBack;
 
+    boolean aButtonPressed = false;
+    boolean bButtonPressed  = false;
+    boolean xButtonPressed  = false;
     final static int ENCODER_CPR = 1120;
     final static double GEAR_RATIO = 1;
     final static double WHEEL_DIAMETER = 2.75;
 
     final static double CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
-
-    // Servo arm;
-  // double armDelta = 0.01;
-  // double armPosition;
-
     @Override
-    public void runOpMode() throws InterruptedException {
-    {
-        // arm = hardwareMap.servo.get("ServoArm");
-       // armPosition = 0;
-        // arm.setPosition(0);
+
+    public void init() {
         leftFront = hardwareMap.dcMotor.get("motor_1");
         rightFront = hardwareMap.dcMotor.get("motor_2");
         leftBack = hardwareMap.dcMotor.get("motor_3");
         rightBack = hardwareMap.dcMotor.get("motor_4");
-        armTwist = hardwareMap.dcMotor.get("motor_5");
-        armLift = hardwareMap.dcMotor.get("motor_6");
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
+
         leftBack.setDirection(DcMotor.Direction.REVERSE);
-
-        waitForStart();
-        // while (getRuntime() < endTime) {
-            move(25, 1.0, 1.0 );
-            //turn(6.25, 1.0, 1.0);
-            //move(50, 1.0, 1.0);
-            //turn(12.5, 1.0, 1.0);
-            //move(80, 1.0, 1.0);
-        //}
-
-      //  leftMotor.setPowerFloat();
-       // rightMotor.setPowerFloat();
-        setMotorPower(0.0 ,0.0);
-
+        leftFront.setDirection(DcMotor.Direction.REVERSE);
     }
-  }
+
+    @Override
+    public void start ()
+    {
+    }
+
+    @Override
+    public void loop()
+    {
+        if (gamepad1.a) {
+            resetEncoders();
+            aButtonPressed = true;
+        }
+        if( aButtonPressed ) {
+            if( waitForResetEncoders() ) {
+                turn(12.4);
+                aButtonPressed = false;
+            }
+        }
+        if (gamepad1.b) {
+            resetEncoders();
+            bButtonPressed = true;
+        }
+        if( bButtonPressed ) {
+            if( waitForResetEncoders() ) {
+                turn(12.5);
+                bButtonPressed = false;
+            }
+        }
+        if (gamepad1.x && !xButtonPressed) {
+            resetEncoders();
+            xButtonPressed = true;
+        }
+        if (xButtonPressed) {
+            if( waitForResetEncoders() ) {
+                turn(12.6);
+                xButtonPressed = false;
+            }
+        }
+
+            telemetry.addData("left motors position", leftFront.getCurrentPosition());
+            telemetry.addData("right motors position",rightFront.getCurrentPosition() );
+    }
+
     public void resetEncoders() {
         leftFront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         rightFront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -97,66 +116,37 @@ public class League0AutoOp extends LinearOpMode {
         rightBack.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
 
-    public void waitForResetEncoders() {
-        while( leftFront.getCurrentPosition() != 0 ||
-                rightFront.getCurrentPosition() != 0 ||
-                leftBack.getCurrentPosition() != 0 ||
-                rightBack.getCurrentPosition() != 0 ) {
-            try {
-                sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    public boolean waitForResetEncoders() {
+        return leftFront.getCurrentPosition() == 0 &&
+                rightFront.getCurrentPosition() == 0 &&
+                leftBack.getCurrentPosition() == 0 &&
+                rightBack.getCurrentPosition() == 0;
     }
 
-    public void waitForCounts(int leftCounts, int rightCounts) {
-        while( Math.abs(leftFront.getCurrentPosition()) < Math.abs(leftCounts) ||
-                Math.abs(rightFront.getCurrentPosition()) < Math.abs(rightCounts) ||
-                Math.abs(leftBack.getCurrentPosition())< Math.abs(leftCounts) ||
-                Math.abs(rightBack.getCurrentPosition()) < Math.abs(rightCounts) ) {
-            try {
-                sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-    public void turn(double distance , double leftPower , double rightPower) {
-        resetEncoders();
-        waitForResetEncoders();
+    public void move(double distance) {
         int counts = convertDistance(distance);
-        leftFront.setTargetPosition(-counts);
-        rightFront.setTargetPosition(counts);
+        leftFront.setTargetPosition((int)counts);
+        rightFront.setTargetPosition((int) counts);
         leftFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rightFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        leftBack.setTargetPosition(-counts);
-        rightBack.setTargetPosition(counts);
+        leftBack.setTargetPosition((int) counts);
+        rightBack.setTargetPosition((int) counts);
         leftBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         rightBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        setMotorPower(leftPower, rightPower);
-        waitForCounts(-counts, counts);
-    }
-    public void move(double distance , double leftPower , double rightPower) {
-        resetEncoders();
-        waitForResetEncoders();
-        int counts = convertDistance(distance);
-        leftFront.setTargetPosition(counts);
-        rightFront.setTargetPosition(counts);
-        leftFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rightFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        leftBack.setTargetPosition(counts);
-        rightBack.setTargetPosition(counts);
-        leftBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rightBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        setMotorPower(leftPower, rightPower);
-        waitForCounts(counts , counts);
-    }
 
-    public int convertDistance(double distance){
-        double  rotations = distance / CIRCUMFERENCE;
-        double counts = ENCODER_CPR * rotations * GEAR_RATIO;
-        return (int) counts;
+        setMotorPower(1, -1);
+    }
+    public void turn(double distance) {
+        int counts = convertDistance(distance);
+        leftFront.setTargetPosition((int)-counts);
+        rightFront.setTargetPosition((int) counts);
+        leftFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rightFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        leftBack.setTargetPosition((int) -counts);
+        rightBack.setTargetPosition((int) counts);
+        leftBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        rightBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        setMotorPower(1, 1);
     }
 
     public void setMotorPower(double rightPower,double leftPower){
@@ -165,4 +155,16 @@ public class League0AutoOp extends LinearOpMode {
         leftBack.setPower(leftPower);
         rightBack.setPower(rightPower);
     }
+
+    public int convertDistance(double distance){
+        double  rotations = distance / CIRCUMFERENCE;
+        double counts = ENCODER_CPR * rotations * GEAR_RATIO;
+        return (int) counts;
+    }
+
+    @Override
+    public void stop()
+    {
+    }
 }
+

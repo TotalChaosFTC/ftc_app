@@ -47,7 +47,7 @@ public class TestEncoder extends OpMode {
     final static int ENCODER_CPR = 1120;
     final static double GEAR_RATIO = 1;
     final static int WHEEL_DIAMETER = 4;
-    final static int DISTANCE = 24;
+    final static int DISTANCE = 50;
 
     final static double CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
     final static double  ROTATIONS = DISTANCE / CIRCUMFERENCE;

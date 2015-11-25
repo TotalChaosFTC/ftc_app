@@ -55,12 +55,12 @@ public class FtcOpModeRegister implements OpModeRegister {
      * If two or more op modes are registered with the same name, the app will display an error.
      */
 
-    manager.register("NullOp", NullOp.class);
+    //manager.register("NullOp", NullOp.class);
 
-    manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);
-    manager.register("K9TeleOp", K9TeleOp.class);
-    manager.register ("PushBotAuto", PushBotAuto.class);
-    manager.register ("PushBotManual", PushBotManual.class);
+    //manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);
+    //manager.register("K9TeleOp", K9TeleOp.class);
+    //manager.register("PushBotAuto", PushBotAuto.class);
+    //manager.register("PushBotManual", PushBotManual.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
@@ -75,31 +75,42 @@ public class FtcOpModeRegister implements OpModeRegister {
 
 
     //manager.register("NxtTeleOp", NxtTeleOp.class);
-    
+
     //manager.register("LinearK9TeleOp", LinearK9TeleOp.class);
     //manager.register("LinearIrExample", LinearIrExample.class);
 
-    
+
     //manager.register ("PushBotManual1", PushBotManual1.class);
     //manager.register ("PushBotAutoSensors", PushBotAutoSensors.class);
     //manager.register ("PushBotIrEvent", PushBotIrEvent.class);
-    
+
     //manager.register ("PushBotManualSensors", PushBotManualSensors.class);
     //manager.register ("PushBotOdsDetectEvent", PushBotOdsDetectEvent.class);
     //manager.register ("PushBotOdsFollowEvent", PushBotOdsFollowEvent.class);
     //manager.register ("PushBotTouchEvent", PushBotTouchEvent.class);    
-    
+
     //manager.register("PushBotDriveTouch", PushBotDriveTouch.java);
     //manager.register("PushBotIrSeek", PushBotIrSeek.java);
     //manager.register("PushBotSquare", PushBotSquare.java);
 
-    manager.register ("TankRobotOp", TankRobotOp.class);
-    manager.register ("ServoTestOp", ServoTestOp.class);
-    manager.register ("TankServoOp", TankServoOp.class);
-    manager.register ("TestEncoderOp", TestEncoder.class);
-    manager.register ("LinearTestOp", LinearTestOp.class);
-    manager.register ("PulleyArmOp", PulleyArmOp.class);
-    manager.register ("ContinuousServoTestOp", ContinuousServoTestOp.class);
-    manager.register ("MeasureEncoder", MeasureEncoder.class);
+    manager.register("TankRobotOp", TankRobotOp.class);
+    //manager.register("ServoTestOp", ServoTestOp.class);
+    //manager.register("TankServoOp", TankServoOp.class);
+    manager.register("TestEncoderOp", TestEncoder.class);
+    //manager.register("LinearTestOp", LinearTestOp.class);
+    //manager.register("PulleyArmOp", PulleyArmOp.class);
+    //manager.register("ContinuousServoTestOp", ContinuousServoTestOp.class);
+    //manager.register("MeasureEncoder", MeasureEncoder.class);
+    //manager.register("AutoTestOp", AutoTestOp.class);
+    manager.register("FourMotorMeasureEncoder", FourMotorMeasureEncoder.class);
+    manager.register("League0MountainOp", League0AutoOp.class);
+    manager.register("FifteenMinuteOp", FifteenMinuteRun.class);
+    manager.register("League0FloorGoalOp", League0FloorGoalOp.class);
+    manager.register("AutoOp", AutoOp.class);
+    manager.register("LeagueTwoOp", LeagueTwoOp.class);
+    manager.register("LeagueTwoRedOp", LeagueTwoRedOp.class);
+    manager.register("AutoOpLeague2", AutoOpLeague2.class);
+
+
   }
 }

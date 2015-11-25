@@ -78,6 +78,8 @@ public class LinearTestOp extends LinearOpMode {
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
         motorLeft3.setDirection(DcMotor.Direction.REVERSE);
 
+
+
         waitForStart();
         double currentTime = getRuntime();
         double endTime = currentTime + 50000;
@@ -104,6 +106,7 @@ public class LinearTestOp extends LinearOpMode {
                 double  ROTATIONS = 2 / CIRCUMFERENCE;
                 double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
                 move((int) counts);            }
+
         }
 
       //  leftMotor.setPowerFloat();
@@ -132,9 +135,17 @@ public class LinearTestOp extends LinearOpMode {
             }
         }
         motorLeft.setTargetPosition((int)counts);
-        motorRight.setTargetPosition((int)-counts);
+        motorRight.setTargetPosition((int) -counts);
         motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft2.setTargetPosition((int) counts);
+        motorRight2.setTargetPosition((int) -counts);
+        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft3.setTargetPosition((int)counts);
+        motorRight3.setTargetPosition((int) -counts);
+        motorLeft3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         setMotorPower(1.0, -1.0);
     }
     public void move(int counts) {
@@ -150,6 +161,14 @@ public class LinearTestOp extends LinearOpMode {
         motorRight.setTargetPosition((int)counts);
         motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft2.setTargetPosition((int)counts);
+        motorRight2.setTargetPosition((int)counts);
+        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorLeft3.setTargetPosition((int)counts);
+        motorRight3.setTargetPosition((int)counts);
+        motorLeft3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        motorRight3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
         setMotorPower(1.0, 1.0);
     }
     public void setMotorPower(double rightPower,double leftPower){

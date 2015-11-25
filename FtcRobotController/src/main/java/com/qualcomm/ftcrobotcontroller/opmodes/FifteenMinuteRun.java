@@ -33,7 +33,6 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -41,9 +40,7 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class TankRobotOp extends OpMode {
-    double armDelta = 0.01;
-    double armPosition = 0;
+public class FifteenMinuteRun extends OpMode {
     boolean iSawDpadUpAlready = false;
     boolean iSawDpadDownAlready = false;
     DcMotor leftFront;
@@ -52,14 +49,12 @@ public class TankRobotOp extends OpMode {
     DcMotor rightBack;
     DcMotor armTwist;
     DcMotor armLift;
-    DcMotor frontSweeper;
-    Servo ClickerRight;
-    Servo ClickerLeft;
     final static double FAST = 1.0;
     final static double MED_FAST = 0.75;
     final static double MEDIUM = 0.5;
     final static double SLOW = 0.25;
     double mode = FAST;
+    double i =0;
     public void init()
     {
         leftFront = hardwareMap.dcMotor.get("motor_1");
@@ -68,9 +63,6 @@ public class TankRobotOp extends OpMode {
         rightBack = hardwareMap.dcMotor.get("motor_4");
         armTwist = hardwareMap.dcMotor.get("motor_5");
         armLift = hardwareMap.dcMotor.get("motor_6");
-        frontSweeper = hardwareMap.dcMotor.get("motor_7");
-        ClickerLeft = hardwareMap.servo.get("servo1");
-        ClickerRight = hardwareMap.servo.get("servo2");
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
     }
@@ -101,38 +93,11 @@ public class TankRobotOp extends OpMode {
         }
         mode = Range.clip(mode, 0.25, 1 );
 
-        /*if (gamepad2.left_bumper){
-            armPosition += -1 * armDelta;
-            armPosition = Range.clip(armPosition, 0, 1);
-            ClickerLeft.setPosition(armPosition);
-        }
-        if (gamepad2.right_bumper){
-            armPosition += 1 * armDelta;
-            armPosition = Range.clip(armPosition, 0 , 1);
-            ClickerLeft.setPosition(armPosition);
-        }*/
-
-
-        if (gamepad2.left_trigger > 0){
-            armPosition += -1 * armDelta;
-            armPosition = Range.clip(armPosition, 0, 1);
-            ClickerLeft.setPosition(armPosition);
-        }
-        if (gamepad2.right_trigger > 0){
-            armPosition += 1 * armDelta;
-            armPosition = Range.clip(armPosition, 0, 1);
-            ClickerLeft.setPosition(armPosition);
-        }
-
-
         // when leftstick is pushed up move forward
         //when rightstick is pushed down move backwards
-        double left = gamepad1.left_stick_y;
-        double right= gamepad1.right_stick_y;
-        double sweeper =gamepad1.right_trigger;
+        double left = -1;
+        double right= 1;
 
-        double up = gamepad2.left_stick_y;
-        double forward = gamepad2.right_stick_y;
 
 
         right = (double)scaleInput(right);
@@ -141,23 +106,27 @@ public class TankRobotOp extends OpMode {
         right= Range.clip(right, -mode, mode);
         left= Range.clip(left, -mode, mode);
 
-        forward= Range.clip(forward, -1, 1);
-        up= Range.clip(up, -1, 1);
-        frontSweeper.setPower(sweeper);
-        armLift.setPower(up);
-        armTwist.setPower(forward);
-        leftFront.setPower(left);
-        leftBack.setPower(left);
-        rightFront.setPower(right);
-        rightBack.setPower(right);
+
+        if (i < 1000) {
+            armLift.setPower(0);
+            armTwist.setPower(0);
+            leftFront.setPower(left);
+            leftBack.setPower(left);
+            rightFront.setPower(right);
+            rightBack.setPower(right);
+            i++;
+        }
+
+        if (i > 999)
 
 
-        telemetry.addData("arm position", String.format("%.2f", armPosition));
-        telemetry.addData("arm lift",  String.format("%.2f", up));
-        telemetry.addData("arm twist",  String.format("%.2f", forward));
 
-
+        telemetry.addData("Text", "*** Robot Data***");
+        telemetry.addData("left tgt pwr", "left  pwr: " + String.format("%.2f", left));
+        telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
     }
+
+
 
 
     @Override

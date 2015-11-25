@@ -42,7 +42,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
  * NOTE: This op mode will not work with the NXT Motor Controllers. Use an Nxt op mode instead.
  */
 
-public class League0AutoOp extends LinearOpMode {
+public class AutoOp extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -62,7 +62,6 @@ public class League0AutoOp extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-    {
         // arm = hardwareMap.servo.get("ServoArm");
        // armPosition = 0;
         // arm.setPosition(0);
@@ -77,11 +76,24 @@ public class League0AutoOp extends LinearOpMode {
 
         waitForStart();
         // while (getRuntime() < endTime) {
-            move(25, 1.0, 1.0 );
-            //turn(6.25, 1.0, 1.0);
-            //move(50, 1.0, 1.0);
-            //turn(12.5, 1.0, 1.0);
-            //move(80, 1.0, 1.0);
+        telemetry.addData("Position", "before step 1");
+        waitOneFullHardwareCycle();
+            move(25, 1.0, 1.0);
+        telemetry.addData("Position", "after step 1");
+        waitOneFullHardwareCycle();
+        turn(6, 0.5, 0.5);
+        telemetry.addData("Position", "after step 2");
+        waitOneFullHardwareCycle();
+            move(50, 1.0, 1.0);
+        telemetry.addData("Position", "after step 3");
+        waitOneFullHardwareCycle();
+            turn(12, 0.5, 0.5);
+        telemetry.addData("Position", "after step 4");
+        waitOneFullHardwareCycle();
+            move(50, 0.5, 0.5);
+        telemetry.addData("Position" , "after step 5");
+        waitOneFullHardwareCycle();
+
         //}
 
       //  leftMotor.setPowerFloat();
@@ -89,7 +101,7 @@ public class League0AutoOp extends LinearOpMode {
         setMotorPower(0.0 ,0.0);
 
     }
-  }
+
     public void resetEncoders() {
         leftFront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         rightFront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -116,7 +128,7 @@ public class League0AutoOp extends LinearOpMode {
                 Math.abs(leftBack.getCurrentPosition())< Math.abs(leftCounts) ||
                 Math.abs(rightBack.getCurrentPosition()) < Math.abs(rightCounts) ) {
             try {
-                sleep(100);
+                waitForNextHardwareCycle();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -126,31 +138,35 @@ public class League0AutoOp extends LinearOpMode {
         resetEncoders();
         waitForResetEncoders();
         int counts = convertDistance(distance);
-        leftFront.setTargetPosition(-counts);
-        rightFront.setTargetPosition(counts);
-        leftFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rightFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        leftBack.setTargetPosition(-counts);
-        rightBack.setTargetPosition(counts);
-        leftBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rightBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        setMotorPower(leftPower, rightPower);
+        leftFront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rightFront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        leftBack.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rightBack.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        setMotorPower(leftPower, -rightPower);
         waitForCounts(-counts, counts);
+        setMotorPower(0.0, 0.0);
+        try {
+            waitForNextHardwareCycle();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
     public void move(double distance , double leftPower , double rightPower) {
         resetEncoders();
         waitForResetEncoders();
         int counts = convertDistance(distance);
-        leftFront.setTargetPosition(counts);
-        rightFront.setTargetPosition(counts);
-        leftFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rightFront.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        leftBack.setTargetPosition(counts);
-        rightBack.setTargetPosition(counts);
-        leftBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        rightBack.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
+        leftFront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rightFront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        leftBack.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        rightBack.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         setMotorPower(leftPower, rightPower);
-        waitForCounts(counts , counts);
+        waitForCounts(counts, counts);
+        setMotorPower(0.0, 0.0);
+        try {
+            waitForNextHardwareCycle();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public int convertDistance(double distance){
