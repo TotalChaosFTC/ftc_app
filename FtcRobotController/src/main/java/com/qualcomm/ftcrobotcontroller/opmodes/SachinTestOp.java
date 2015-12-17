@@ -41,32 +41,39 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class ContinuousServoOp extends OpMode {
+public class SachinTestOp extends OpMode {
 
-  Servo servo;
+    double testMotor = 0;
+    DcMotor right;
+    DcMotor left;
+    Servo sweeper;
 
-  /*
-   * Code to run when the op mode is first enabled goes here
-   * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
-   */
-  double armDelta = 0.01;
-  double armPosition = 0;
-  @Override
-  public void init() {
-
-    servo = hardwareMap.servo.get("servo");
-  }
-
-
-  @Override
-  public void loop() {
-        if (gamepad1.a){
-      armPosition += 1 * armDelta;
-      armPosition = Range.clip(armPosition, 0, 1);
-      servo.setPosition(armPosition);
-
+    public void init()
+    {
+        right = hardwareMap.dcMotor.get("motor_1");
+        left = hardwareMap.dcMotor.get("motor_2");
+        sweeper = hardwareMap.servo.get("servo_1");
     }
 
+    @Override
+    public void loop()
+    {
+        double motorPower = gamepad1.left_stick_y;
+        right.setPower(motorPower);
+        double backMotorPower = gamepad1.right_stick_y;
+        left.setPower(backMotorPower);
 
-  }
+        if (gamepad1.a) {
+            double servoPower = gamepad1.right_trigger;
+            sweeper.setPosition(servoPower);
+        }
+           }
+
+
+    @Override
+    public void stop()
+    {
+    }
+
 }
+

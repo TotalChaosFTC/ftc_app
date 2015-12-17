@@ -91,26 +91,28 @@ public class FtcOpModeRegister implements OpModeRegister {
 
     //manager.register("PushBotDriveTouch", PushBotDriveTouch.java);
     //manager.register("PushBotIrSeek", PushBotIrSeek.java);
-    //manager.register("PushBotSquare", PushBotSquare.java);
 
     manager.register("TankRobotOp", TankRobotOp.class);
     //manager.register("ServoTestOp", ServoTestOp.class);
     //manager.register("TankServoOp", TankServoOp.class);
-    manager.register("TestEncoderOp", TestEncoder.class);
+    //manager.register("TestEncoderOp", TestEncoder.class);
     //manager.register("LinearTestOp", LinearTestOp.class);
     //manager.register("PulleyArmOp", PulleyArmOp.class);
-    //manager.register("ContinuousServoTestOp", ContinuousServoTestOp.class);
+    manager.register("ContinuousServoOp", ContinuousServoOp.class);
     //manager.register("MeasureEncoder", MeasureEncoder.class);
     //manager.register("AutoTestOp", AutoTestOp.class);
-    manager.register("FourMotorMeasureEncoder", FourMotorMeasureEncoder.class);
-    manager.register("League0MountainOp", League0AutoOp.class);
-    manager.register("FifteenMinuteOp", FifteenMinuteRun.class);
-    manager.register("League0FloorGoalOp", League0FloorGoalOp.class);
-    manager.register("AutoOp", AutoOp.class);
-    manager.register("LeagueTwoOp", LeagueTwoOp.class);
-    manager.register("LeagueTwoRedOp", LeagueTwoRedOp.class);
-    manager.register("AutoOpLeague2", AutoOpLeague2.class);
-
-
+    //manager.register("FourMotorMeasureEncoder", FourMotorMeasureEncoder.class);
+    //manager.register("League0MountainOp", League0AutoOp.class);
+    //manager.register("FifteenMinuteOp", FifteenMinuteRun.class);
+    //manager.register("League0FloorGoalOp", League0FloorGoalOp.class);
+    //manager.register("AutoOp", AutoOp.class);
+    //manager.register("LeagueTwoOp", LeagueTwoOp.class);
+    //manager.register("LeagueTwoRedOp", LeagueTwoRedOp.class);
+    manager.register("BlueNormal", AutoOpLeague2.class);
+    manager.register("RedNormal", RedAutoOpLeague2.class);
+    manager.register("CornerRed", CornerRedAutoOpLeague2.class);
+    manager.register("CornerBlue", CornerAutoOpLeague2.class);
+    manager.register("ArmBlue", ArmAutoOpLeague2.class);
+    manager.register("ArmRed", RedArmAutoOpLeague2.class);
   }
 }

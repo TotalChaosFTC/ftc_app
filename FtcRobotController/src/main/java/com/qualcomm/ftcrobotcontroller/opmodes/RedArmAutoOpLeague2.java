@@ -35,7 +35,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 import java.util.Vector;
 
@@ -44,9 +43,10 @@ import java.util.Vector;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class AutoOpLeague2 extends OpMode {
+public class RedArmAutoOpLeague2 extends OpMode {
     double armDelta = 0.01;
     double armPosition = 0;
+    int loopNumber = 0;
     boolean iSawDpadUpAlready = false;
     boolean iSawDpadDownAlready = false;
     DcMotor leftFront;
@@ -65,6 +65,7 @@ public class AutoOpLeague2 extends OpMode {
     final static int WAITFORRESETENCODERS = 1;
     final static int WAITFORCOUNTS = 2;
     final static int FINISHED = 3;
+    final static int MOVEARM = 4;
     int state = ATREST;
     final static int ENCODER_CPR = 1120;
     final static double GEAR_RATIO = 1;
@@ -107,7 +108,7 @@ public class AutoOpLeague2 extends OpMode {
             double counts = ENCODER_CPR * rotations * GEAR_RATIO;
             return (int) counts;
         }
-    }
+    };
 
     public void init()
     {
@@ -124,10 +125,11 @@ public class AutoOpLeague2 extends OpMode {
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         steps = new Vector<Step>();
         steps.add(new Step(25, 0.5, 0.5, MOVE));
-        steps.add(new Step(6, 0.5, 0.5, RIGHT));
+        steps.add(new Step(6, 0.5, 0.5, LEFT));
         steps.add(new Step(45, 0.5, 0.5, MOVE));
-        steps.add(new Step(7, 0.5, 0.5, RIGHT));
-        steps.add(new Step(48, 0.5, 0.5, MOVE));
+        steps.add(new Step(5.5, 0.5, 0.5, LEFT));
+        steps.add(new Step(50, 0.5, 0.5, MOVE));
+        steps.add(new Step(48, 0.5,0.5, LEFT));
         currentStep = steps.get(0);
         currentStepIndex = 0;
     }
@@ -151,7 +153,8 @@ public class AutoOpLeague2 extends OpMode {
                 frontSweeper.setPower(0);
                 currentStepIndex = currentStepIndex + 1;
                 if (currentStepIndex >= steps.size()){
-                    state = FINISHED;
+                    state = MOVEARM;
+                    armTwist.setPower(0.2);
                 }
                 else {
                     currentStep = steps.get(currentStepIndex);
@@ -159,6 +162,14 @@ public class AutoOpLeague2 extends OpMode {
                 }
 
             }
+            else if( state == MOVEARM){
+                loopNumber++;
+                if (loopNumber > 100){
+                    armTwist.setPower(0);
+                    state = FINISHED;
+                }
+            }
+
         }
     }
 

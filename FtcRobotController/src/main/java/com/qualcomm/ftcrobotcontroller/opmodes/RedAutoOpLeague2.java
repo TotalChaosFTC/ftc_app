@@ -35,7 +35,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 import java.util.Vector;
 
@@ -44,7 +43,7 @@ import java.util.Vector;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class AutoOpLeague2 extends OpMode {
+public class RedAutoOpLeague2 extends OpMode {
     double armDelta = 0.01;
     double armPosition = 0;
     boolean iSawDpadUpAlready = false;
@@ -107,14 +106,14 @@ public class AutoOpLeague2 extends OpMode {
             double counts = ENCODER_CPR * rotations * GEAR_RATIO;
             return (int) counts;
         }
-    }
+    };
 
     public void init()
     {
-        leftFront = hardwareMap.dcMotor.get("motor_1");
-        rightFront = hardwareMap.dcMotor.get("motor_2");
-        leftBack = hardwareMap.dcMotor.get("motor_3");
-        rightBack = hardwareMap.dcMotor.get("motor_4");
+        rightFront = hardwareMap.dcMotor.get("motor_1");
+        leftFront = hardwareMap.dcMotor.get("motor_2");
+        rightBack = hardwareMap.dcMotor.get("motor_3");
+        leftBack = hardwareMap.dcMotor.get("motor_4");
         armTwist = hardwareMap.dcMotor.get("motor_5");
         armLift = hardwareMap.dcMotor.get("motor_6");
         frontSweeper = hardwareMap.dcMotor.get("motor_7");
@@ -124,10 +123,10 @@ public class AutoOpLeague2 extends OpMode {
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         steps = new Vector<Step>();
         steps.add(new Step(25, 0.5, 0.5, MOVE));
-        steps.add(new Step(6, 0.5, 0.5, RIGHT));
+        steps.add(new Step(6, 0.5, 0.5, LEFT));
         steps.add(new Step(45, 0.5, 0.5, MOVE));
-        steps.add(new Step(7, 0.5, 0.5, RIGHT));
-        steps.add(new Step(48, 0.5, 0.5, MOVE));
+        steps.add(new Step(7, 0.5, 0.5, LEFT));
+        steps.add(new Step(65, 0.5, 0.5, MOVE));
         currentStep = steps.get(0);
         currentStepIndex = 0;
     }

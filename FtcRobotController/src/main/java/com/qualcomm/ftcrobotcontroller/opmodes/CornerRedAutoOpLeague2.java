@@ -35,7 +35,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Range;
 
 import java.util.Vector;
 
@@ -44,7 +43,7 @@ import java.util.Vector;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class AutoOpLeague2 extends OpMode {
+public class CornerRedAutoOpLeague2 extends OpMode {
     double armDelta = 0.01;
     double armPosition = 0;
     boolean iSawDpadUpAlready = false;
@@ -107,7 +106,7 @@ public class AutoOpLeague2 extends OpMode {
             double counts = ENCODER_CPR * rotations * GEAR_RATIO;
             return (int) counts;
         }
-    }
+    };
 
     public void init()
     {
@@ -123,11 +122,10 @@ public class AutoOpLeague2 extends OpMode {
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         steps = new Vector<Step>();
-        steps.add(new Step(25, 0.5, 0.5, MOVE));
-        steps.add(new Step(6, 0.5, 0.5, RIGHT));
+        steps.add(new Step(6, 0.5, 0.5, LEFT));
         steps.add(new Step(45, 0.5, 0.5, MOVE));
-        steps.add(new Step(7, 0.5, 0.5, RIGHT));
-        steps.add(new Step(48, 0.5, 0.5, MOVE));
+        steps.add(new Step(7, 0.5, 0.5, LEFT));
+        steps.add(new Step(75, 0.5, 0.5, MOVE));
         currentStep = steps.get(0);
         currentStepIndex = 0;
     }

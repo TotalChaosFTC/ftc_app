@@ -43,9 +43,15 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class TankRobotOp extends OpMode {
     double armDelta = 0.01;
-    double armPosition = 0;
+    double rightArmPosition = 0;
+    double leftArmPosition = 1;
+    double hooks = 0;
+    double sweeper = 0;
+    double hookDelta = 0.1;
     boolean iSawDpadUpAlready = false;
     boolean iSawDpadDownAlready = false;
+    boolean iSawDpadUpAlreadyArm = false;
+    boolean iSawDpadDownAlreadyArm = false;
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -53,13 +59,17 @@ public class TankRobotOp extends OpMode {
     DcMotor armTwist;
     DcMotor armLift;
     DcMotor frontSweeper;
-    Servo ClickerRight;
-    Servo ClickerLeft;
+    Servo clickerRight;
+    Servo clickerLeft;
+    Servo leftHook;
+    Servo rightHook;
     final static double FAST = 1.0;
     final static double MED_FAST = 0.75;
     final static double MEDIUM = 0.5;
     final static double SLOW = 0.25;
+    double armMode = FAST;
     double mode = FAST;
+
     public void init()
     {
         leftFront = hardwareMap.dcMotor.get("motor_1");
@@ -69,10 +79,13 @@ public class TankRobotOp extends OpMode {
         armTwist = hardwareMap.dcMotor.get("motor_5");
         armLift = hardwareMap.dcMotor.get("motor_6");
         frontSweeper = hardwareMap.dcMotor.get("motor_7");
-        ClickerLeft = hardwareMap.servo.get("servo1");
-        ClickerRight = hardwareMap.servo.get("servo2");
+        clickerLeft = hardwareMap.servo.get("servo1");
+        clickerRight = hardwareMap.servo.get("servo2");
+        leftHook = hardwareMap.servo.get("servo3");
+        rightHook = hardwareMap.servo.get("servo4");
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftHook.setDirection(Servo.Direction.REVERSE);
     }
 
     @Override
@@ -80,7 +93,7 @@ public class TankRobotOp extends OpMode {
     {
         // When dpad is pushed up increase one mode
         //When dpad is pushed down decrease by one mode
-        if (gamepad2.dpad_up) {
+        if (gamepad1.dpad_up) {
             if(!iSawDpadUpAlready) {
                 iSawDpadUpAlready = true;
                 mode = mode + 0.25;
@@ -90,7 +103,7 @@ public class TankRobotOp extends OpMode {
             iSawDpadUpAlready = false;
         }
 
-        if (gamepad2.dpad_down) {
+        if (gamepad1.dpad_down) {
             if(!iSawDpadDownAlready) {
                 iSawDpadDownAlready = true;
                 mode = mode - 0.25;
@@ -101,35 +114,83 @@ public class TankRobotOp extends OpMode {
         }
         mode = Range.clip(mode, 0.25, 1 );
 
-        /*if (gamepad2.left_bumper){
-            armPosition += -1 * armDelta;
-            armPosition = Range.clip(armPosition, 0, 1);
-            ClickerLeft.setPosition(armPosition);
+
+
+        if (gamepad2.dpad_up) {
+            if(!iSawDpadUpAlreadyArm) {
+                iSawDpadUpAlreadyArm = true;
+                armMode = armMode + 0.25;
+            }
+        }
+        else {
+            iSawDpadUpAlreadyArm = false;
+        }
+
+        if (gamepad2.dpad_down) {
+            if(!iSawDpadDownAlreadyArm) {
+                iSawDpadDownAlreadyArm = true;
+                armMode = armMode - 0.25;
+            }
+        }
+        else {
+            iSawDpadDownAlreadyArm = false;
+        }
+        armMode = Range.clip(armMode, 0.25, 1 );
+
+        if (gamepad2.left_bumper){
+            leftArmPosition += -1 * armDelta;
+            leftArmPosition = Range.clip(leftArmPosition, 0 , 1);
+            clickerLeft.setPosition(leftArmPosition);
         }
         if (gamepad2.right_bumper){
-            armPosition += 1 * armDelta;
-            armPosition = Range.clip(armPosition, 0 , 1);
-            ClickerLeft.setPosition(armPosition);
-        }*/
+            leftArmPosition += 1 * armDelta;
+            leftArmPosition = Range.clip(leftArmPosition, 0 , 1);
+            clickerLeft.setPosition(leftArmPosition);
+        }
 
 
         if (gamepad2.left_trigger > 0){
-            armPosition += -1 * armDelta;
-            armPosition = Range.clip(armPosition, 0, 1);
-            ClickerLeft.setPosition(armPosition);
+            rightArmPosition += -1 * armDelta;
+            rightArmPosition = Range.clip(rightArmPosition, 0, 1);
+            clickerRight.setPosition(rightArmPosition);
         }
         if (gamepad2.right_trigger > 0){
-            armPosition += 1 * armDelta;
-            armPosition = Range.clip(armPosition, 0, 1);
-            ClickerLeft.setPosition(armPosition);
+            rightArmPosition += 1 * armDelta;
+            rightArmPosition = Range.clip(rightArmPosition, 0, 1);
+            clickerRight.setPosition(rightArmPosition);
         }
 
+        if (gamepad2.y){
+            hooks += 1 * hookDelta;
+            hooks = Range.clip(hooks, 0, 1);
+            leftHook.setPosition(hooks);
+            rightHook.setPosition(hooks);
+        }
+        if (gamepad2.a){
+            hooks += -1 * hookDelta;
+            hooks = Range.clip(hooks, 0, 1);
+            leftHook.setPosition(hooks);
+            rightHook.setPosition(hooks);
+        }
+        if (gamepad1.left_trigger > 0){
+            sweeper = -gamepad1.left_trigger;
+            sweeper = Range.clip(sweeper, -1, 1);
+            frontSweeper.setPower(sweeper);
+        }
+        else if (gamepad1.right_trigger > 0){
+            sweeper = gamepad1.right_trigger;
+            sweeper = Range.clip(sweeper, -1, 1);
+            frontSweeper.setPower(sweeper);
+        }
+        else {
+            frontSweeper.setPower(0);
+        }
 
         // when leftstick is pushed up move forward
         //when rightstick is pushed down move backwards
         double left = gamepad1.left_stick_y;
         double right= gamepad1.right_stick_y;
-        double sweeper =gamepad1.right_trigger;
+
 
         double up = gamepad2.left_stick_y;
         double forward = gamepad2.right_stick_y;
@@ -141,9 +202,8 @@ public class TankRobotOp extends OpMode {
         right= Range.clip(right, -mode, mode);
         left= Range.clip(left, -mode, mode);
 
-        forward= Range.clip(forward, -1, 1);
-        up= Range.clip(up, -1, 1);
-        frontSweeper.setPower(sweeper);
+        forward= Range.clip(forward, -armMode, armMode);
+        up= Range.clip(up, -armMode, armMode);
         armLift.setPower(up);
         armTwist.setPower(forward);
         leftFront.setPower(left);
@@ -151,8 +211,8 @@ public class TankRobotOp extends OpMode {
         rightFront.setPower(right);
         rightBack.setPower(right);
 
-
-        telemetry.addData("arm position", String.format("%.2f", armPosition));
+        telemetry.addData("left arm position", String.format("%.2f", leftArmPosition));
+        telemetry.addData("right arm position", String.format("%.2f", rightArmPosition));
         telemetry.addData("arm lift",  String.format("%.2f", up));
         telemetry.addData("arm twist",  String.format("%.2f", forward));
 
