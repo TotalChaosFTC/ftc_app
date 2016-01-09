@@ -49,6 +49,7 @@ public class AutoOpLeague2 extends OpMode {
     double armPosition = 0;
     boolean iSawDpadUpAlready = false;
     boolean iSawDpadDownAlready = false;
+    int loopNumber = 0;
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -56,8 +57,11 @@ public class AutoOpLeague2 extends OpMode {
     DcMotor armTwist;
     DcMotor armLift;
     DcMotor frontSweeper;
-    Servo ClickerRight;
-    Servo ClickerLeft;
+    Servo clickerRight;
+    Servo clickerLeft;
+    Servo leftHook;
+    Servo rightHook;
+    Servo ClimberDrop;
     Vector<Step> steps;
     Step currentStep;
     int currentStepIndex;
@@ -65,6 +69,7 @@ public class AutoOpLeague2 extends OpMode {
     final static int WAITFORRESETENCODERS = 1;
     final static int WAITFORCOUNTS = 2;
     final static int FINISHED = 3;
+    final static int MOVEARM = 4;
     int state = ATREST;
     final static int ENCODER_CPR = 1120;
     final static double GEAR_RATIO = 1;
@@ -118,16 +123,20 @@ public class AutoOpLeague2 extends OpMode {
         armTwist = hardwareMap.dcMotor.get("motor_5");
         armLift = hardwareMap.dcMotor.get("motor_6");
         frontSweeper = hardwareMap.dcMotor.get("motor_7");
-        ClickerLeft = hardwareMap.servo.get("servo1");
-        ClickerRight = hardwareMap.servo.get("servo2");
+        clickerLeft = hardwareMap.servo.get("servo1");
+        clickerRight = hardwareMap.servo.get("servo2");
+        leftHook = hardwareMap.servo.get("servo3");
+        rightHook = hardwareMap.servo.get("servo4");
+        ClimberDrop = hardwareMap.servo.get("servo5");
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
+        clickerLeft.setDirection(Servo.Direction.REVERSE);
         steps = new Vector<Step>();
-        steps.add(new Step(25, 0.5, 0.5, MOVE));
-        steps.add(new Step(6, 0.5, 0.5, RIGHT));
-        steps.add(new Step(45, 0.5, 0.5, MOVE));
-        steps.add(new Step(7, 0.5, 0.5, RIGHT));
-        steps.add(new Step(48, 0.5, 0.5, MOVE));
+        steps.add(new Step(25, 0.25, 0.25, MOVE));
+        steps.add(new Step(6, 0.25, 0.25, RIGHT));
+        steps.add(new Step(72, 0.25, 0.25, MOVE));
+        steps.add(new Step(5, 0.25, 0.25, RIGHT));
+        steps.add(new Step(44, 0.25, 0.25, MOVE));
         currentStep = steps.get(0);
         currentStepIndex = 0;
     }
@@ -151,7 +160,8 @@ public class AutoOpLeague2 extends OpMode {
                 frontSweeper.setPower(0);
                 currentStepIndex = currentStepIndex + 1;
                 if (currentStepIndex >= steps.size()){
-                    state = FINISHED;
+                    state = MOVEARM;
+                    armTwist.setPower(0.2);
                 }
                 else {
                     currentStep = steps.get(currentStepIndex);
@@ -159,6 +169,14 @@ public class AutoOpLeague2 extends OpMode {
                 }
 
             }
+            else if( state == MOVEARM){
+                loopNumber++;
+                if (loopNumber > 100){
+                    ClimberDrop.setPosition(0.75);
+                    state = FINISHED;
+                }
+            }
+
         }
     }
 
