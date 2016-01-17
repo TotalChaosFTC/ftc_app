@@ -45,11 +45,6 @@ import java.util.Vector;
  *Enables control of the robot via the gamepad
  */
 public class AutoOpLeague2 extends OpMode {
-    double armDelta = 0.01;
-    double armPosition = 0;
-    boolean iSawDpadUpAlready = false;
-    boolean iSawDpadDownAlready = false;
-    int loopNumber = 0;
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -78,13 +73,17 @@ public class AutoOpLeague2 extends OpMode {
     final static int MOVE = 1;
     final static int RIGHT = 2;
     final static int LEFT = 3;
+    final static boolean FORWARD = true;
+    final static boolean BACKWARD = false;
+
     public class Step {
         public double distance;
         public double leftPower;
         public double rightPower;
         public int rightCounts;
         public int leftCounts;
-        public Step(double dist, double left, double right, int stepType) {
+        public boolean sweeperDirection;
+        public Step(double dist, double left, double right, int stepType, boolean direction) {
             distance = dist;
             if (stepType == MOVE){
                 rightCounts = convertDistance(distance);
@@ -106,6 +105,7 @@ public class AutoOpLeague2 extends OpMode {
                     rightPower = -right;
                 }
             }
+            sweeperDirection = direction;
         }
         public int convertDistance(double distance){
             double  rotations = distance / CIRCUMFERENCE;
@@ -128,15 +128,20 @@ public class AutoOpLeague2 extends OpMode {
         leftHook = hardwareMap.servo.get("servo3");
         rightHook = hardwareMap.servo.get("servo4");
         ClimberDrop = hardwareMap.servo.get("servo5");
+        ClimberDrop.setPosition(0.71);
+        clickerRight.setPosition(1);
+        clickerLeft.setPosition(0.0);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         clickerLeft.setDirection(Servo.Direction.REVERSE);
+        clickerRight.setDirection(Servo.Direction.REVERSE);
+        ClimberDrop.setDirection(Servo.Direction.REVERSE);
         steps = new Vector<Step>();
-        steps.add(new Step(25, 0.25, 0.25, MOVE));
-        steps.add(new Step(6, 0.25, 0.25, RIGHT));
-        steps.add(new Step(72, 0.25, 0.25, MOVE));
-        steps.add(new Step(5, 0.25, 0.25, RIGHT));
-        steps.add(new Step(44, 0.25, 0.25, MOVE));
+        steps.add(new Step(30, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(6, 0.25, 0.25, RIGHT, FORWARD));
+        steps.add(new Step(59, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(7.5, 0.25, 0.25, RIGHT, FORWARD));
+        steps.add(new Step(39, 0.25, 0.25, MOVE, BACKWARD));
         currentStep = steps.get(0);
         currentStepIndex = 0;
     }
@@ -150,34 +155,37 @@ public class AutoOpLeague2 extends OpMode {
         else if( state == WAITFORRESETENCODERS) {
             if (areEncodersReset()){
                 setMotorPower(currentStep.leftPower, currentStep.rightPower);
-                frontSweeper.setPower(0.75);
+                if (currentStep.sweeperDirection == FORWARD) {
+                    frontSweeper.setPower(0.75);
+                }
+                else if(currentStep.sweeperDirection == BACKWARD){
+                    frontSweeper.setPower(-0.75);
+                }
                 state = WAITFORCOUNTS;
             }
         }
-        else if (state== WAITFORCOUNTS){
-            if (areCountsReached(currentStep.leftCounts, currentStep.rightCounts)){
+        else if (state== WAITFORCOUNTS) {
+            if (areCountsReached(currentStep.leftCounts, currentStep.rightCounts)) {
                 setMotorPower(0, 0);
                 frontSweeper.setPower(0);
                 currentStepIndex = currentStepIndex + 1;
-                if (currentStepIndex >= steps.size()){
+                if (currentStepIndex >= steps.size()) {
                     state = MOVEARM;
-                    armTwist.setPower(0.2);
-                }
-                else {
+                } else {
                     currentStep = steps.get(currentStepIndex);
                     state = ATREST;
                 }
-
             }
-            else if( state == MOVEARM){
-                loopNumber++;
-                if (loopNumber > 100){
-                    ClimberDrop.setPosition(0.75);
-                    state = FINISHED;
-                }
-            }
-
         }
+        else if( state == MOVEARM){
+            ClimberDrop.setPosition(0.22);
+            state = FINISHED;
+        }
+    }
+
+    @Override
+    public void stop(){
+        state = ATREST;
     }
 
     public void resetEncoders() {
