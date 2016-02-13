@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 /**
  * Register Op Modes
@@ -98,7 +99,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("TestEncoderOp", TestEncoder.class);
     //manager.register("LinearTestOp", LinearTestOp.class);
     //manager.register("PulleyArmOp", PulleyArmOp.class);
-    manager.register("ContinuousServoOp", ContinuousServoOp.class);
+    //manager.register("ContinuousServoOp", ContinuousServoOp.class);
     //manager.register("MeasureEncoder", MeasureEncoder.class);
     //manager.register("AutoTestOp", AutoTestOp.class);
     //manager.register("FourMotorMeasureEncoder", FourMotorMeasureEncoder.class);
@@ -110,9 +111,13 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("LeagueTwoRedOp", LeagueTwoRedOp.class);
     manager.register("BlueNormal", AutoOpLeague2.class);
     manager.register("RedNormal", RedAutoOpLeague2.class);
-    manager.register("CornerRed", CornerRedAutoOpLeague2.class);
-    manager.register("CornerBlue", CornerAutoOpLeague2.class);
-    manager.register("ArmBlue", ArmAutoOpLeague2.class);
-    manager.register("ArmRed", RedArmAutoOpLeague2.class);
+    //manager.register("RedMoveBack", RedAutoOpLeague2MoveBack.class);
+    //manager.register("CornerRed", CornerRedAutoOpLeague2.class);
+    //manager.register("CornerBlue", CornerAutoOpLeague2.class);
+    //manager.register("ColorSensorTest", ColorSensorOp.class);
+    //manager.register("TankRoverOp", TankRoverOp.class);
+    //manager.register("TouchSensorTest", TouchSensorTest.class);
+    //manager.register("ArmBlue", ArmAutoOpLeague2.class);
+    //manager.register("ArmRed", RedArmAutoOpLeague2.class);
   }
 }

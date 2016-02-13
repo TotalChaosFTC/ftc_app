@@ -43,16 +43,21 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class TankRobotOp extends OpMode {
     double armDelta = 0.01;
-    double rightArmPosition = 0.75;
+    double rightArmPosition = 0;
     double leftArmPosition = 0;
+    double leftGatePosition = 0;
+    double rightGatePosition = 0;
     double hooks = 0;
     double sweeper = 0;
+    double winchPower = 0;
     double hookDelta = 0.1;
     double dropper = 0.71;
     boolean iSawDpadUpAlready = false;
     boolean iSawDpadDownAlready = false;
     boolean iSawDpadUpAlreadyArm = false;
     boolean iSawDpadDownAlreadyArm = false;
+    boolean iSawDpadLeftAlreadyWinch = false;
+    boolean iSawDpadRightAlreadyWinch = false;
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -60,6 +65,9 @@ public class TankRobotOp extends OpMode {
     DcMotor armTwist;
     DcMotor armLift;
     DcMotor frontSweeper;
+    DcMotor winch;
+    Servo rightGate;
+    Servo leftGate;
     Servo clickerRight;
     Servo clickerLeft;
     Servo leftHook;
@@ -71,6 +79,7 @@ public class TankRobotOp extends OpMode {
     final static double SLOW = 0.25;
     double armMode = FAST;
     double mode = FAST;
+    double winchMode = FAST;
 
     public void init()
     {
@@ -83,12 +92,14 @@ public class TankRobotOp extends OpMode {
         frontSweeper = hardwareMap.dcMotor.get("motor_7");
         clickerLeft = hardwareMap.servo.get("servo1");
         clickerRight = hardwareMap.servo.get("servo2");
-        leftHook = hardwareMap.servo.get("servo3");
-        rightHook = hardwareMap.servo.get("servo4");
+        leftGate = hardwareMap.servo.get("servo3");
+        rightGate = hardwareMap.servo.get("servo4");
         ClimberDrop = hardwareMap.servo.get("servo5");
+        winch = hardwareMap.dcMotor.get("motor_8");
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         clickerLeft.setDirection(Servo.Direction.REVERSE);
+        armLift.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
@@ -119,41 +130,65 @@ public class TankRobotOp extends OpMode {
 
 
 
-        if (gamepad2.dpad_up) {
-            if(!iSawDpadUpAlreadyArm) {
-                iSawDpadUpAlreadyArm = true;
-                armMode = armMode + 0.25;
+        if (gamepad2.dpad_right) {
+            if(!iSawDpadRightAlreadyWinch) {
+                iSawDpadRightAlreadyWinch = true;
+                winchMode = winchMode + 0.25;
             }
         }
         else {
-            iSawDpadUpAlreadyArm = false;
+            iSawDpadRightAlreadyWinch = false;
         }
 
-        if (gamepad2.dpad_down) {
-            if(!iSawDpadDownAlreadyArm) {
-                iSawDpadDownAlreadyArm = true;
-                armMode = armMode - 0.25;
+        if (gamepad2.dpad_left) {
+            if(!iSawDpadLeftAlreadyWinch) {
+                iSawDpadLeftAlreadyWinch = true;
+                winchMode = winchMode - 0.25;
             }
         }
         else {
-            iSawDpadDownAlreadyArm = false;
+            iSawDpadLeftAlreadyWinch = false;
         }
-        armMode = Range.clip(armMode, 0.25, 1 );
+        winchMode = Range.clip(winchMode, 0.25, 1 );
+
+
+
+        if (gamepad1.dpad_up) {
+            if(!iSawDpadUpAlready) {
+                iSawDpadUpAlready = true;
+                mode = mode + 0.25;
+            }
+        }
+        else {
+            iSawDpadUpAlready = false;
+        }
+
+        if (gamepad1.dpad_down) {
+            if(!iSawDpadDownAlready) {
+                iSawDpadDownAlready = true;
+                mode = mode - 0.25;
+            }
+        }
+        else {
+            iSawDpadDownAlready = false;
+        }
+        mode = Range.clip(mode, 0.25, 1 );
+
 
         if (gamepad2.left_bumper){
             leftArmPosition += -1 * armDelta;
-            leftArmPosition = Range.clip(leftArmPosition, 0 , 0.75);
+            leftArmPosition = Range.clip(leftArmPosition, 0 , 1);
             clickerLeft.setPosition(leftArmPosition);
         }
         if (gamepad2.right_bumper){
             leftArmPosition += 1 * armDelta;
-            leftArmPosition = Range.clip(leftArmPosition, 0 , 0.75);
+            leftArmPosition = Range.clip(leftArmPosition, 0 , 1);
             clickerLeft.setPosition(leftArmPosition);
         }
 
 
         if (gamepad2.left_trigger > 0){
-            rightArmPosition += -1 * armDelta;
+            rightArmPosition     += -1 * armDelta;
             rightArmPosition = Range.clip(rightArmPosition,0, 1);
             clickerRight.setPosition(rightArmPosition);
         }
@@ -162,19 +197,43 @@ public class TankRobotOp extends OpMode {
             rightArmPosition = Range.clip(rightArmPosition, 0, 1);
             clickerRight.setPosition(rightArmPosition);
         }
+        if (gamepad1.dpad_left){
+            leftGatePosition += 1 * armDelta;
+            leftGatePosition = Range.clip(leftGatePosition,0, 1);
+            leftGate.setPosition(leftGatePosition);
+        }
+        if (gamepad1.dpad_right){
+            leftGatePosition += -1 * armDelta;
+            leftGatePosition = Range.clip(leftGatePosition, 0, 1);
+            leftGate.setPosition(leftGatePosition);
+        }
 
+        if (gamepad1.x){
+            rightGatePosition += -1 * armDelta;
+            rightGatePosition = Range.clip(rightGatePosition, 0, 1);
+            rightGate.setPosition(rightGatePosition);
+        }
+        if (gamepad1.b){
+            rightGatePosition += 1 * armDelta;
+            rightGatePosition = Range.clip(rightGatePosition, 0, 1);
+            rightGate.setPosition(rightGatePosition);
+        }
         if (gamepad2.y){
-            hooks += 1 * hookDelta;
-            hooks = Range.clip(hooks, 0, 1);
-            leftHook.setPosition(hooks);
-            rightHook.setPosition(hooks);
+            winchPower = 1;
+            winchPower = Range.clip(winchPower, -winchMode, winchMode);
+            winch.setPower(winchPower);
         }
-        if (gamepad2.a){
-            hooks += -1 * hookDelta;
-            hooks = Range.clip(hooks, 0, 1);
-            leftHook.setPosition(hooks);
-            rightHook.setPosition(hooks);
+        else if (gamepad2.a){
+            winchPower = -1;
+            winchPower = Range.clip(winchPower, -winchMode, winchMode);
+            winch.setPower(winchPower);
         }
+        else{
+            winchPower = 0;
+            winch.setPower(winchPower);
+        }
+
+
         if (gamepad1.left_trigger > 0){
             sweeper = -gamepad1.left_trigger;
             sweeper = Range.clip(sweeper, -1, 1);
@@ -190,16 +249,6 @@ public class TankRobotOp extends OpMode {
         }
 
 
-        if (gamepad2.x){
-            dropper += 1 * armDelta;
-            dropper = Range.clip(dropper, 0, 1);
-            ClimberDrop.setPosition(dropper);
-        }
-        if (gamepad2.b){
-            dropper += -1 * armDelta;
-            dropper = Range.clip(dropper, 0, 1);
-            ClimberDrop.setPosition(dropper);
-        }
 
         // when leftstick is pushed up move forward
         //when rightstick is pushed down move backwards
@@ -210,7 +259,18 @@ public class TankRobotOp extends OpMode {
         double up = gamepad2.left_stick_y;
         double forward = gamepad2.right_stick_y;
 
-
+        if (gamepad2.x){
+            winchPower = -1;
+            winch.setPower(winchPower);
+            up = -1;
+            armLift.setPower(up);
+        }
+        if (gamepad2.b){
+            winchPower = 0;
+            winch.setPower(winchPower);
+            up = 0;
+            armLift.setPower(up);
+        }
         right = (double)scaleInput(right);
         left =  (double)scaleInput(left);
 
@@ -227,8 +287,8 @@ public class TankRobotOp extends OpMode {
         rightBack.setPower(right);
 
         telemetry.addData("dropper", String.format("%.2f", dropper));
-        telemetry.addData("left zipline", String.format("%.2f", leftArmPosition));
-        telemetry.addData("right zipline", String.format("%.2f", rightArmPosition));
+        telemetry.addData("left zipline", String.format("%.2f", clickerLeft.getPosition()));
+        telemetry.addData("right zipline", String.format("%.2f", clickerRight.getPosition()));
         telemetry.addData("arm lift",  String.format("%.2f", up));
         telemetry.addData("arm twist",  String.format("%.2f", forward));
 

@@ -31,37 +31,23 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.Range;
-
-import java.util.Vector;
-
 /**
  * TeleOp Mode
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class AutoOpLeague2 extends NewBaseAutoOp {
-
-
-
-
+public class TouchSensorTest extends NewBaseAutoOp {
     @Override
     public void initSteps() {
-        steps.add(new Step(50, 0.25, 0.25, MOVE, BACKWARD));
-        steps.add(new Step(7.75, 0.25, 0.25, RIGHT, BACKWARD));
-        steps.add(new Step(64, 0.25, 0.25, MOVE, BACKWARD));
-        steps.add(new Step(18.5, 0.25, 0.25,RIGHT, BACKWARD ));
-        steps.add(new Step(17, 0.25, 0.25,MOVE, FORWARD ));
-        steps.add(new Step(3, 0.25, 0.25,RIGHT, FORWARD ));
-        steps.add(new Step(12, 0.25, 0.25,BACK, FORWARD ));
-        steps.add(new Step(1, 0.1, 0.1,MOVEARM, FORWARD ));
-        steps.add(new Step(8, 0.25, 0.25,MOVE, FORWARD ));
-        steps.add(new Step(20, 0.1, 0.1,BLUE, FORWARD ));
+        steps.add(new Step(46, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(7.75, 0.25, 0.25, LEFT, FORWARD));
+        steps.add(new Step(54, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(24, 0.25, 0.25,LEFT, FORWARD ));
+        steps.add(new Step(24, 0.25, 0.25,MOVE, FORWARD ));
+        steps.add(new Step(2, 0.25, 0.25,LEFT, FORWARD ));
+        steps.add(new Step(15, 0.25, 0.25,BACK, FORWARD ));
+        steps.add(new Step(15, 0.1, 0.1,BLUE, FORWARD ));
+        steps.add(new Step(0.75, 0.1, 0.1,MOVEARM, FORWARD ));
 
 
     }

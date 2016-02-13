@@ -42,9 +42,9 @@ import com.qualcomm.robotcore.util.Range;
  */
 public class ServoTestOp extends OpMode {
 
-  Servo arm;
-  double armDelta = 0.01;
-  double armPosition;
+  Servo pusher;
+  double pusherposition = 0.01;
+
 
   /*
    * Code to run when the op mode is first enabled goes here
@@ -52,16 +52,22 @@ public class ServoTestOp extends OpMode {
    */
   @Override
   public void init() {
-    arm = hardwareMap.servo.get("ServoArm");
-    armPosition = 0;
-    arm.setPosition(0);
+    pusher = hardwareMap.servo.get("servo1");
+    pusherposition = 0;
   }
 
 
   @Override
   public void loop() {
-    armPosition += gamepad1.left_stick_y * armDelta;
-    armPosition = Range.clip(armPosition, 0, 1);
-    arm.setPosition(armPosition);
+    if (gamepad1.y){
+      pusherposition = pusherposition + 0.1 ;
+      pusherposition = Range.clip(pusherposition, 0, 1);
+      pusher.setPosition(pusherposition);
+    }
+    if (gamepad1.a){
+      pusherposition = pusherposition - 0.1 ;
+      pusherposition = Range.clip(pusherposition, 0, 1);
+      pusher.setPosition(pusherposition);
+    }
   }
 }
