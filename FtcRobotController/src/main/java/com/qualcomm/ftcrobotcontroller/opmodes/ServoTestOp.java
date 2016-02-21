@@ -32,6 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -43,6 +44,7 @@ import com.qualcomm.robotcore.util.Range;
 public class ServoTestOp extends OpMode {
 
   Servo pusher;
+  ColorSensor color1;
   double pusherposition = 0.01;
 
 
@@ -53,19 +55,27 @@ public class ServoTestOp extends OpMode {
   @Override
   public void init() {
     pusher = hardwareMap.servo.get("servo1");
+    color1 =  hardwareMap.colorSensor.get("color1");
     pusherposition = 0;
   }
 
 
   @Override
   public void loop() {
+    telemetry.addData("Blue Value", color1.blue());
+    telemetry.addData("Red Value", color1.red());
     if (gamepad1.y){
-      pusherposition = pusherposition + 0.1 ;
+      pusherposition = 1;
       pusherposition = Range.clip(pusherposition, 0, 1);
       pusher.setPosition(pusherposition);
     }
     if (gamepad1.a){
-      pusherposition = pusherposition - 0.1 ;
+      pusherposition = 0 ;
+      pusherposition = Range.clip(pusherposition, 0, 1);
+      pusher.setPosition(pusherposition);
+    }
+    if (gamepad1.x){
+      pusherposition = 0.5 ;
       pusherposition = Range.clip(pusherposition, 0, 1);
       pusher.setPosition(pusherposition);
     }
