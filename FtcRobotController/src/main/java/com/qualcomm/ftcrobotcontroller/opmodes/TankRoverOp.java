@@ -50,8 +50,6 @@ public class TankRoverOp extends OpMode {
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
-    DcMotor armTwist;
-    DcMotor armLift;
     final static double FAST = 1.0;
     final static double MED_FAST = 0.75;
     final static double MEDIUM = 0.5;
@@ -65,8 +63,6 @@ public class TankRoverOp extends OpMode {
         rightFront = hardwareMap.dcMotor.get("motor_2");
         leftBack = hardwareMap.dcMotor.get("motor_3");
         rightBack = hardwareMap.dcMotor.get("motor_4");
-        armTwist = hardwareMap.dcMotor.get("motor_5");
-        armLift = hardwareMap.dcMotor.get("motor_6");
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
     }
@@ -97,16 +93,11 @@ public class TankRoverOp extends OpMode {
         }
         mode = Range.clip(mode, 0.25, 1 );
 
-
-
         // when leftstick is pushed up move forward
         //when rightstick is pushed down move backwards
         double left = gamepad1.left_stick_y;
         double right= gamepad1.right_stick_y;
 
-
-        double up = gamepad2.left_stick_y;
-        double forward = gamepad2.right_stick_y;
 
 
         right = (double)scaleInput(right);
@@ -115,10 +106,6 @@ public class TankRoverOp extends OpMode {
         right= Range.clip(right, -mode, mode);
         left= Range.clip(left, -mode, mode);
 
-        forward= Range.clip(forward, -armMode, armMode);
-        up= Range.clip(up, -armMode, armMode);
-        armLift.setPower(up);
-        armTwist.setPower(forward);
         leftFront.setPower(left);
         leftBack.setPower(left);
         rightFront.setPower(right);

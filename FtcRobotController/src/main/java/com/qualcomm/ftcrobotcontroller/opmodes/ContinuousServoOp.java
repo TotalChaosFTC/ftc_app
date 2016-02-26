@@ -49,7 +49,6 @@ public class ContinuousServoOp extends OpMode {
    * Code to run when the op mode is first enabled goes here
    * @see com.qualcomm.robotcore.eventloop.opmode.OpMode#start()
    */
-  double armDelta = 0.01;
   double armPosition = 0;
   @Override
   public void init() {
@@ -61,7 +60,7 @@ public class ContinuousServoOp extends OpMode {
   @Override
   public void loop() {
         if (gamepad1.a){
-      armPosition += 1 * armDelta;
+      armPosition = 1;
       armPosition = Range.clip(armPosition, 0, 1);
       servo.setPosition(armPosition);
 

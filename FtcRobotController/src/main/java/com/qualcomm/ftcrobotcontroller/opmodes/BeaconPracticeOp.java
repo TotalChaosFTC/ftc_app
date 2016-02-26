@@ -31,32 +31,29 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorController;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import java.util.Vector;
-
 /**
  * TeleOp Mode
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class CornerRedAutoOpLeague2 extends NewBaseAutoOp {
+public class BeaconPracticeOp extends NewBaseAutoOp {
+
+
+
+
     @Override
     public void initSteps() {
-        steps.add(new NewBaseAutoOp.Step(20, 0.25, 0.25, MOVE, BACKWARD));
-        steps.add(new NewBaseAutoOp.Step(7.75, 0.25, 0.25, LEFT, BACKWARD));
-        steps.add(new NewBaseAutoOp.Step(102, 0.25, 0.25, MOVE, BACKWARD));
-        steps.add(new NewBaseAutoOp.Step(8, 0.25, 0.25,RIGHT, FORWARD ));
-        steps.add(new NewBaseAutoOp.Step(24, 0.25, 0.25, BACK, BACKWARD));
-        steps.add(new NewBaseAutoOp.Step(1, 0.1, 0.1,MOVEARM, FORWARD ));
-        steps.add(new NewBaseAutoOp.Step(7.5, 0.25, 0.25,MOVE, FORWARD ));
-        steps.add(new NewBaseAutoOp.Step(0.5, 0.25, 0.25,LEFT, FORWARD ));
-        steps.add(new NewBaseAutoOp.Step(15, 0.25, 0.25,RED, FORWARD ));
 
+        steps.add(new Step(0, 0.25, 0.25, MOVEPUSHER, NONE));
+        steps.add(new Step(0, 0.25, 0.25, BLUE, FORWARD));
+        steps.add(new Step(4, 0.25, 0.25, BACK, FORWARD));
+        steps.add(new Step(0.55, 0.25, 0.25, MOVEPUSHER, FORWARD));
+        steps.add(new Step(6, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(4, 0.25, 0.25, BACK, FORWARD));
 
     }
 }
+
+
+
 

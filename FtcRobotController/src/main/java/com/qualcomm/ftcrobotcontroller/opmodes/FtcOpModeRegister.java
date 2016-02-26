@@ -71,7 +71,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("ColorSensorDriver", ColorSensorDriver.class);
 
     //manager.register("IrSeekerOp", IrSeekerOp.class);
-    //manager.register("CompassCalibration", CompassCalibration.class);
+    manager.register("CompassCalibration", CompassCalibration.class);
     //manager.register("I2cAddressChangeExample", LinearI2cAddressChange.class);
 
 
@@ -94,7 +94,7 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("PushBotIrSeek", PushBotIrSeek.java);
 
     manager.register("TankRobotOp", TankRobotOp.class);
-    //manager.register("ServoTestOp", ServoTestOp.class);
+    manager.register("ServoTestOp", ServoTestOp.class);
     //manager.register("TankServoOp", TankServoOp.class);
     //manager.register("TestEncoderOp", TestEncoder.class);
     //manager.register("LinearTestOp", LinearTestOp.class);
@@ -111,11 +111,12 @@ public class FtcOpModeRegister implements OpModeRegister {
     //manager.register("LeagueTwoRedOp", LeagueTwoRedOp.class);
     manager.register("BlueNormal", AutoOpLeague2.class);
     manager.register("RedNormal", RedAutoOpLeague2.class);
+    manager.register("eaconPractice", BeaconPracticeOp.class);
     //manager.register("RedMoveBack", RedAutoOpLeague2MoveBack.class);
-    //manager.register("CornerRed", CornerRedAutoOpLeague2.class);
-    //manager.register("CornerBlue", CornerAutoOpLeague2.class);
+    manager.register("CornerRed", CornerRedAutoOpLeague2.class);
+    manager.register("CornerBlue", CornerAutoOpLeague2.class);
     //manager.register("ColorSensorTest", ColorSensorOp.class);
-    //manager.register("TankRoverOp", TankRoverOp.class);
+    manager.register("TankRoverOp", TankRoverOp.class);
     //manager.register("TouchSensorTest", TouchSensorTest.class);
     //manager.register("ArmBlue", ArmAutoOpLeague2.class);
     //manager.register("ArmRed", RedArmAutoOpLeague2.class);

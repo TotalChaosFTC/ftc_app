@@ -46,7 +46,8 @@ public class TankRobotOp extends OpMode {
     double rightArmPosition = 0;
     double leftArmPosition = 0;
     double leftGatePosition = 0;
-    double rightGatePosition = 0;
+    double climberPosition = 0;
+    double buttonFlapPosition = 0;
     double hooks = 0;
     double sweeper = 0;
     double winchPower = 0;
@@ -66,8 +67,8 @@ public class TankRobotOp extends OpMode {
     DcMotor armLift;
     DcMotor frontSweeper;
     DcMotor winch;
-    Servo rightGate;
-    Servo leftGate;
+    Servo buttonFlap;
+    Servo sensorSlide;
     Servo clickerRight;
     Servo clickerLeft;
     Servo leftHook;
@@ -92,8 +93,8 @@ public class TankRobotOp extends OpMode {
         frontSweeper = hardwareMap.dcMotor.get("motor_7");
         clickerLeft = hardwareMap.servo.get("servo1");
         clickerRight = hardwareMap.servo.get("servo2");
-        leftGate = hardwareMap.servo.get("servo3");
-        rightGate = hardwareMap.servo.get("servo4");
+        buttonFlap = hardwareMap.servo.get("servo3");
+        sensorSlide = hardwareMap.servo.get("servo4");
         ClimberDrop = hardwareMap.servo.get("servo5");
         winch = hardwareMap.dcMotor.get("motor_8");
         leftBack.setDirection(DcMotor.Direction.REVERSE);
@@ -198,32 +199,32 @@ public class TankRobotOp extends OpMode {
             clickerRight.setPosition(rightArmPosition);
         }
         if (gamepad1.dpad_left){
-            leftGatePosition += 1 * armDelta;
-            leftGatePosition = Range.clip(leftGatePosition,0, 1);
-            leftGate.setPosition(leftGatePosition);
+            buttonFlapPosition += 1 * armDelta;
+            buttonFlapPosition = Range.clip(buttonFlapPosition,0, 1);
+            buttonFlap.setPosition(leftGatePosition);
         }
         if (gamepad1.dpad_right){
-            leftGatePosition += -1 * armDelta;
-            leftGatePosition = Range.clip(leftGatePosition, 0, 1);
-            leftGate.setPosition(leftGatePosition);
+            buttonFlapPosition += -1 * armDelta;
+            buttonFlapPosition = Range.clip(buttonFlapPosition, 0, 1);
+            buttonFlap.setPosition(buttonFlapPosition);
         }
 
         if (gamepad1.x){
-            rightGatePosition += -1 * armDelta;
-            rightGatePosition = Range.clip(rightGatePosition, 0, 1);
-            rightGate.setPosition(rightGatePosition);
+            climberPosition += -1 * armDelta;
+            climberPosition = Range.clip(climberPosition, 0, 1);
+            ClimberDrop.setPosition(climberPosition);
         }
         if (gamepad1.b){
-            rightGatePosition += 1 * armDelta;
-            rightGatePosition = Range.clip(rightGatePosition, 0, 1);
-            rightGate.setPosition(rightGatePosition);
+            climberPosition += 1 * armDelta;
+            climberPosition = Range.clip(climberPosition, 0, 1);
+            ClimberDrop.setPosition(climberPosition);
         }
-        if (gamepad2.y){
+        if (gamepad2.y) {
             winchPower = 1;
             winchPower = Range.clip(winchPower, -winchMode, winchMode);
             winch.setPower(winchPower);
         }
-        else if (gamepad2.a){
+        else if (gamepad2.a) {
             winchPower = -1;
             winchPower = Range.clip(winchPower, -winchMode, winchMode);
             winch.setPower(winchPower);
@@ -232,6 +233,7 @@ public class TankRobotOp extends OpMode {
             winchPower = 0;
             winch.setPower(winchPower);
         }
+
 
 
         if (gamepad1.left_trigger > 0){

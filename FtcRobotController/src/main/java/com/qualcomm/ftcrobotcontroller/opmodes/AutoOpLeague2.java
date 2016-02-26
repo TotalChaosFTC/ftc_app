@@ -52,17 +52,22 @@ public class AutoOpLeague2 extends NewBaseAutoOp {
 
     @Override
     public void initSteps() {
-        steps.add(new Step(50, 0.25, 0.25, MOVE, BACKWARD));
-        steps.add(new Step(7.75, 0.25, 0.25, RIGHT, BACKWARD));
-        steps.add(new Step(64, 0.25, 0.25, MOVE, BACKWARD));
-        steps.add(new Step(18.5, 0.25, 0.25,RIGHT, BACKWARD ));
-        steps.add(new Step(17, 0.25, 0.25,MOVE, FORWARD ));
-        steps.add(new Step(3, 0.25, 0.25,RIGHT, FORWARD ));
-        steps.add(new Step(12, 0.25, 0.25,BACK, FORWARD ));
-        steps.add(new Step(1, 0.1, 0.1,MOVEARM, FORWARD ));
-        steps.add(new Step(8, 0.25, 0.25,MOVE, FORWARD ));
-        steps.add(new Step(20, 0.1, 0.1,BLUE, FORWARD ));
-
+        steps.add(new Step(1, 0.25, 0.25, MOVEPUSHER, FORWARD));
+        steps.add(new Step(30, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(6, 0.25, 0.25, RIGHT, FORWARD));
+        steps.add(new Step(59, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(7.5, 0.25, 0.25, RIGHT, FORWARD));
+        steps.add(new Step(20, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(0, 0.25, 0.25, MOVEPUSHER, NONE));
+        steps.add(new Step(16, 0.25, 0.25, MOVE, NONE));
+        steps.add(new Step(0, 0.25, 0.25, MOVEARM, FORWARD));
+        steps.add(new Step(36, 0.25, 0.25, WAIT, FORWARD));
+        steps.add(new Step(0.6, 0.25, 0.25, MOVEARM, FORWARD));
+        steps.add(new Step(0, 0.25, 0.25, BLUE, FORWARD));
+        steps.add(new Step(4, 0.25, 0.25, BACK, FORWARD));
+        steps.add(new Step(0.55, 0.25, 0.25, MOVEPUSHER, FORWARD));
+        steps.add(new Step(4, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(4, 0.25, 0.25, BACK, FORWARD));
 
     }
 }

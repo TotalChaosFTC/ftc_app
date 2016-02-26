@@ -46,19 +46,21 @@ import java.util.Vector;
 public class RedAutoOpLeague2 extends NewBaseAutoOp {
     @Override
     public void initSteps(){
-        steps.add(new Step(0.75, 0.25, 0.25, MOVEPUSHER, FORWARD));
+        steps.add(new Step(0.85, 0.25, 0.25, MOVEPUSHER, FORWARD));
         steps.add(new Step(30, 0.25, 0.25, MOVE, FORWARD));
         steps.add(new Step(6, 0.25, 0.25, LEFT, FORWARD));
-        steps.add(new Step(59, 0.25, 0.25, MOVE, FORWARD));
-        steps.add(new Step(7.5, 0.25, 0.25, LEFT, FORWARD));
-        steps.add(new Step(36, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(79, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(6, 0.25, 0.25, LEFT, FORWARD));
+        steps.add(new Step(17, 0.25, 0.25, MOVE, FORWARD));
         steps.add(new Step(0, 0.25, 0.25, MOVEARM, FORWARD));
-        steps.add(new Step(36, 0.25, 0.25, WAIT, FORWARD));
+        steps.add(new Step(4, 0.25, 0.25, WAIT, FORWARD));
         steps.add(new Step(0.6, 0.25, 0.25, MOVEARM, FORWARD));
         steps.add(new Step(0, 0.25, 0.25, RED, FORWARD));
         steps.add(new Step(4, 0.25, 0.25, BACK, FORWARD));
         steps.add(new Step(0.55, 0.25, 0.25, MOVEPUSHER, FORWARD));
-        steps.add(new Step(2.2, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(4, 0.25, 0.25, MOVE, FORWARD));
+        steps.add(new Step(4, 0.25, 0.25, BACK, FORWARD));
+
     }
 }
 

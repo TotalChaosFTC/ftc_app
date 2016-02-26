@@ -45,7 +45,7 @@ public class CompassCalibration extends OpMode {
   ColorSensor colorSensor_1;
   @Override
   public void init() {
-    colorSensor_1 = hardwareMap.colorSensor.get("colorSensor_1");
+    colorSensor_1 = hardwareMap.colorSensor.get("color1");
     colorSensor_1.enableLed(true);
   }
 

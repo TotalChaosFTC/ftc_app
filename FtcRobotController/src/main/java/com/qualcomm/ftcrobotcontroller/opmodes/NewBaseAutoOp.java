@@ -53,15 +53,16 @@ public abstract class NewBaseAutoOp extends OpMode {
     DcMotor armTwist;
     DcMotor armLift;
     DcMotor frontSweeper;
+    DcMotor winch;
     Servo clickerRight;
     Servo clickerLeft;
-    Servo leftHook;
-    Servo rightHook;
+    Servo buttonFlap;
+    Servo sensorSlide;
     Servo ClimberDrop;
-    Servo buttonPusher;
     ColorSensor color1;
     Vector<Step> steps;
     Step currentStep;
+    int counts = 0;
     int currentStepIndex;
     final static int ATREST = 0;
     final static int WAITFORRESETENCODERS = 1;
@@ -81,8 +82,11 @@ public abstract class NewBaseAutoOp extends OpMode {
     final static int BACK = 6;
     final static int BLUE = 7;
     final static int RED = 8;
-    final static boolean FORWARD = true;
-    final static boolean BACKWARD = false;
+    final static int WAIT = 9;
+    final static int MOVEPUSHER = 10;
+    final static int FORWARD = 11;
+    final static int BACKWARD = 12;
+    final static int NONE = 13;
 
     public class Step {
         public double distance;
@@ -90,10 +94,10 @@ public abstract class NewBaseAutoOp extends OpMode {
         public double rightPower;
         public int rightCounts;
         public int leftCounts;
-        public boolean sweeperDirection;
+        public int sweeperDirection;
         public double armPosition;
         public int sType;
-        public Step(double dist, double left, double right, int stepType, boolean direction) {
+        public Step(double dist, double left, double right, int stepType, int direction) {
             distance = dist;
             sType = stepType;
             if (stepType == MOVE){
@@ -138,6 +142,10 @@ public abstract class NewBaseAutoOp extends OpMode {
                     setMotorPower(0, 0);
                 }*/
             }
+            else if(stepType == WAIT){
+                leftPower = 0;
+                rightPower = 0;
+            }
 
             else{
                 armPosition = dist;
@@ -163,16 +171,15 @@ public abstract class NewBaseAutoOp extends OpMode {
         frontSweeper = hardwareMap.dcMotor.get("motor_7");
         clickerLeft = hardwareMap.servo.get("servo1");
         clickerRight = hardwareMap.servo.get("servo2");
-        leftHook = hardwareMap.servo.get("servo3");
-        rightHook = hardwareMap.servo.get("servo4");
+        buttonFlap = hardwareMap.servo.get("servo3");
+        sensorSlide = hardwareMap.servo.get("servo4");
         ClimberDrop = hardwareMap.servo.get("servo5");
-        buttonPusher = hardwareMap.servo.get("servo6");
+        winch = hardwareMap.dcMotor.get("motor_8");
         color1 = hardwareMap.colorSensor.get("color1");
-        ClimberDrop.setPosition(0.3);
+        ClimberDrop.setPosition(0.6);
         clickerRight.setPosition(0);
-        leftHook.setPosition(1);
         clickerLeft.setPosition(1);
-        buttonPusher.setPosition(0.75);
+        sensorSlide.setPosition(0.5);
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         clickerLeft.setDirection(Servo.Direction.REVERSE);
@@ -199,6 +206,36 @@ public abstract class NewBaseAutoOp extends OpMode {
 
                 }
             }
+            else if(currentStep.sType == MOVEPUSHER){
+                buttonFlap.setPosition(currentStep.distance);
+                currentStepIndex = currentStepIndex + 1;
+                if (currentStepIndex >= steps.size()) {
+                    state = FINISHED;
+                } else {
+                    currentStep = steps.get(currentStepIndex);
+                    state = ATREST;
+
+                }
+            }
+            else if(currentStep.sType == BLUE|| currentStep.sType == RED) {
+                state = WAITFORCOLOR;
+            }
+            else if(currentStep.sType == WAIT){
+                frontSweeper.setPower(0);
+                if (counts == 400){
+                    currentStepIndex = currentStepIndex + 1;
+                    counts = 0;
+                    if (currentStepIndex >= steps.size()) {
+                        state = FINISHED;
+                    } else {
+                        currentStep = steps.get(currentStepIndex);
+                        state = ATREST;
+
+                    }
+                }
+                else{
+                    counts = counts+1;                }
+            }
             else {
                 resetEncoders();
                 state = WAITFORRESETENCODERS;
@@ -208,8 +245,7 @@ public abstract class NewBaseAutoOp extends OpMode {
             if (currentStep.sType == BLUE) {
                 telemetry.addData("Looking for Blue", color1.blue());
                 if (color1.blue() > 0.99) {
-                    setMotorPower(0, 0);
-                    buttonPusher.setPosition(0);
+                    sensorSlide.setPosition(0.5);
                     currentStepIndex = currentStepIndex + 1;
                     if (currentStepIndex >= steps.size()) {
                         state = FINISHED;
@@ -218,21 +254,13 @@ public abstract class NewBaseAutoOp extends OpMode {
                         state = ATREST;
                     }
                 }
-                else if (areCountsReached(currentStep.leftCounts, currentStep.rightCounts)) {
-                    setMotorPower(0, 0);
-                    currentStepIndex = currentStepIndex + 1;
-                    if (currentStepIndex >= steps.size()) {
-                        state = FINISHED;
-                    } else {
-                        currentStep = steps.get(currentStepIndex);
-                        state = ATREST;
-                    }
+                else {
+                    sensorSlide.setPosition(0);
                 }
             } else if (currentStep.sType == RED) {
                 telemetry.addData("Looking for Red", color1.red());
                 if (color1.red() > 0.99) {
-                    setMotorPower(0, 0);
-                    buttonPusher.setPosition(0);
+                    sensorSlide.setPosition(0.5);
                     currentStepIndex = currentStepIndex + 1;
                     if (currentStepIndex >= steps.size()) {
                         state = FINISHED;
@@ -241,37 +269,23 @@ public abstract class NewBaseAutoOp extends OpMode {
                         state = ATREST;
                     }
                 }
-                else if (areCountsReached(currentStep.leftCounts, currentStep.rightCounts)) {
-                    setMotorPower(0, 0);
-                    currentStepIndex = currentStepIndex + 1;
-                    if (currentStepIndex >= steps.size()) {
-                        state = FINISHED;
-                    } else {
-                        currentStep = steps.get(currentStepIndex);
-                        state = ATREST;
-                    }
+                else{
+                    sensorSlide.setPosition(0);
                 }
-
-
             }
-
         }
         else if( state == WAITFORRESETENCODERS) {
             if (areEncodersReset()){
-                if(currentStep.sType == BLUE|| currentStep.sType == RED) {
                     setMotorPower(currentStep.leftPower, currentStep.rightPower);
-                    state = WAITFORCOLOR;
-                }
-                else {
-                    setMotorPower(currentStep.leftPower, currentStep.rightPower);
-
                     if (currentStep.sweeperDirection == FORWARD) {
                         frontSweeper.setPower(1);
                     } else if (currentStep.sweeperDirection == BACKWARD) {
                         frontSweeper.setPower(-1);
                     }
+                    else if (currentStep.sweeperDirection == NONE) {
+                        frontSweeper.setPower(0);
+                    }
                     state = WAITFORCOUNTS;
-                }
             }
         }
         else if (state== WAITFORCOUNTS) {
