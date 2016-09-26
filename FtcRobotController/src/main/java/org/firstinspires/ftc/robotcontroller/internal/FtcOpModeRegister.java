@@ -77,5 +77,32 @@ public class FtcOpModeRegister implements OpModeRegister {
         /**
          * Any manual OpMode class registrations should go here.
          */
+    manager.register("TankRobotOp", TankRobotOp.class);
+    manager.register("ServoTestOp", ServoTestOp.class);
+    //manager.register("TankServoOp", TankServoOp.class);
+    //manager.register("TestEncoderOp", TestEncoder.class);
+    //manager.register("LinearTestOp", LinearTestOp.class);
+    //manager.register("PulleyArmOp", PulleyArmOp.class);
+    //manager.register("ContinuousServoOp", ContinuousServoOp.class);
+    //manager.register("MeasureEncoder", MeasureEncoder.class);
+    //manager.register("AutoTestOp", AutoTestOp.class);
+    //manager.register("FourMotorMeasureEncoder", FourMotorMeasureEncoder.class);
+    //manager.register("League0MountainOp", League0AutoOp.class);
+    //manager.register("FifteenMinuteOp", FifteenMinuteRun.class);
+    //manager.register("League0FloorGoalOp", League0FloorGoalOp.class);
+    //manager.register("AutoOp", AutoOp.class);
+    //manager.register("LeagueTwoOp", LeagueTwoOp.class);
+    //manager.register("LeagueTwoRedOp", LeagueTwoRedOp.class);
+    manager.register("BlueNormal", AutoOpLeague2.class);
+    manager.register("RedNormal", RedAutoOpLeague2.class);
+    manager.register(“BeaconPractice", BeaconPracticeOp.class);
+    //manager.register("RedMoveBack", RedAutoOpLeague2MoveBack.class);
+    manager.register("CornerRed", CornerRedAutoOpLeague2.class);
+    manager.register("CornerBlue", CornerAutoOpLeague2.class);
+    //manager.register("ColorSensorTest", ColorSensorOp.class);
+    manager.register("TankRoverOp", TankRoverOp.class);
+    //manager.register("TouchSensorTest", TouchSensorTest.class);
+    //manager.register("ArmBlue", ArmAutoOpLeague2.class);
+    //manager.register("ArmRed", RedArmAutoOpLeague2.class);
     }
 }

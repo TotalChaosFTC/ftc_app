@@ -46,6 +46,7 @@ public class TestDriveLinear extends LinearOpMode
     {
     DcMotor motorLeft;
     DcMotor motorRight;
+        DcMotor motor1;
 
     @Override
     public void runOpMode() throws InterruptedException
