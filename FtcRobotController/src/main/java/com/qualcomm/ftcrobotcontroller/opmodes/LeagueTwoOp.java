@@ -42,7 +42,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
  * NOTE: This op mode will not work with the NXT Motor Controllers. Use an Nxt op mode instead.
  */
 
-public class LeagueTwoOp extends LinearOpMode {
+/*public class LeagueTwoOp extends LinearOpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -175,3 +175,4 @@ public class LeagueTwoOp extends LinearOpMode {
         rightBack.setPower(rightPower);
     }
 }
+*/

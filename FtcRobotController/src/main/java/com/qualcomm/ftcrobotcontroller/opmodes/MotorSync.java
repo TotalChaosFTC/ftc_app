@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class MotorSync extends OpMode {
+/*public class MotorSync extends OpMode {
     DcMotor motorRight;
     DcMotor motorLeft;
     double powerLeft = 0.5;
@@ -97,3 +97,4 @@ public class MotorSync extends OpMode {
     }
 }
 
+*/

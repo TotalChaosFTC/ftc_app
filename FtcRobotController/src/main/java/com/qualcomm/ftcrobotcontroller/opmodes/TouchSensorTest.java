@@ -36,7 +36,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class TouchSensorTest extends NewBaseAutoOp {
+/*public class TouchSensorTest extends NewBaseAutoOp {
     @Override
     public void initSteps() {
         steps.add(new Step(46, 0.25, 0.25, MOVE, FORWARD));
@@ -52,7 +52,7 @@ public class TouchSensorTest extends NewBaseAutoOp {
 
     }
 }
-
+*/
 
 
 

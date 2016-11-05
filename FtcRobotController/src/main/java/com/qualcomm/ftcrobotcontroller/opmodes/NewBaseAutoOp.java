@@ -45,7 +45,7 @@ import java.util.Vector;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public abstract class NewBaseAutoOp extends OpMode {
+/*public abstract class NewBaseAutoOp extends OpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -140,7 +140,7 @@ public abstract class NewBaseAutoOp extends OpMode {
                 /*setMotorPower(currentStep.leftPower, currentStep.rightPower);
                 if (touch1.getValue() == 1){
                     setMotorPower(0, 0);
-                }*/
+                }
             }
             else if(stepType == WAIT){
                 leftPower = 0;
@@ -348,4 +348,4 @@ public abstract class NewBaseAutoOp extends OpMode {
     }
 }
 
-
+*/

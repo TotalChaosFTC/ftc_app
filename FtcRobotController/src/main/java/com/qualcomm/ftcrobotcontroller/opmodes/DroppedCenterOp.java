@@ -41,25 +41,8 @@ import com.qualcomm.robotcore.util.Range;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class TankRobotOp extends OpMode {
-    double armDelta = 0.01;
-    double rightArmPosition = 0;
-    double leftArmPosition = 0;
-    double leftGatePosition = 0;
-    double climberPosition = 0;
-    double buttonFlapPosition = 0;
-    double hooks = 0;
-    double sweeper = 0;
-    double winchPower = 0;
-    double hookDelta = 0.1;
-    double dropper = 0.71;
-    boolean iSawDpadUpAlready = false;
-    boolean iSawDpadDownAlready = false;
-    boolean iSawDpadUpAlreadyArm = false;
-    boolean iSawDpadDownAlreadyArm = false;
-    boolean iSawDpadLeftAlreadyWinch = false;
-    boolean iSawDpadRightAlreadyWinch = false;
-    DcMotor leftFront;
+public class DroppedCenterOp extends OpMode {
+/*    DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
@@ -81,10 +64,10 @@ public class TankRobotOp extends OpMode {
     double armMode = FAST;
     double mode = FAST;
     double winchMode = FAST;
-
+*/
     public void init()
     {
-
+        /*
 
         rightFront = hardwareMap.dcMotor.get("motor_2");
         leftBack = hardwareMap.dcMotor.get("motor_3");
@@ -102,14 +85,14 @@ public class TankRobotOp extends OpMode {
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         clickerLeft.setDirection(Servo.Direction.REVERSE);
         armLift.setDirection(DcMotor.Direction.REVERSE);
-    }
+    */}
 
     @Override
     public void loop()
     {
         // When dpad is pushed up increase one mode
         //When dpad is pushed down decrease by one mode
-        if (gamepad1.dpad_up) {
+       /* if (gamepad1.dpad_up) {
             if(!iSawDpadUpAlready) {
                 iSawDpadUpAlready = true;
                 mode = mode + 0.25;
@@ -305,9 +288,9 @@ public class TankRobotOp extends OpMode {
         telemetry.addData("arm twist",  String.format("%.2f", forward));
 
 
-    }
+    */}
 
-
+/*
     @Override
     public void stop()
     {
@@ -334,5 +317,6 @@ public class TankRobotOp extends OpMode {
 
         return dScale * mode;
     }
+    */
 }
 

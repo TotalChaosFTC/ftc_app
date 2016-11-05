@@ -43,7 +43,7 @@ import java.util.Vector;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class ArmAutoOpLeague2 extends OpMode {
+/*public class ArmAutoOpLeague2 extends OpMode {
     double armDelta = 0.01;
     double armPosition = 0;
     int loopNumber = 0;
@@ -209,3 +209,4 @@ public class ArmAutoOpLeague2 extends OpMode {
 }
 
 
+*/

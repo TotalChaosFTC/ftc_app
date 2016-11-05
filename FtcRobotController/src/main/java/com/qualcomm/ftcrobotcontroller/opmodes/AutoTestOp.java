@@ -35,14 +35,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-/**
+/*
  * Linear Tele Op Mode
  * <p>
  * Enables control of the robot via the gamepad.
  * NOTE: This op mode will not work with the NXT Motor Controllers. Use an Nxt op mode instead.
  */
 
-public class AutoTestOp extends LinearOpMode {
+/*public class AutoTestOp extends LinearOpMode {
   DcMotor motorRight;
   DcMotor motorLeft;
   DcMotor motorRight2;
@@ -164,3 +164,4 @@ public class AutoTestOp extends LinearOpMode {
         motorRight3.setPower(rightPower);
     }
 }
+*/

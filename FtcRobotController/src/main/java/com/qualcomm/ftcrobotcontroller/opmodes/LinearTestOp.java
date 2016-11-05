@@ -35,6 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -44,139 +45,37 @@ import com.qualcomm.robotcore.util.Range;
  * NOTE: This op mode will not work with the NXT Motor Controllers. Use an Nxt op mode instead.
  */
 
+
 public class LinearTestOp extends LinearOpMode {
-  DcMotor motorRight;
-  DcMotor motorLeft;
-  DcMotor motorRight2;
-  DcMotor motorLeft2;
-  DcMotor motorRight3;
-  DcMotor motorLeft3;
-    final static int ENCODER_CPR = 1120;
-    final static double GEAR_RATIO = 1;
-    final static int WHEEL_DIAMETER = 4;
-    final static int DISTANCE = 100;
+    private ElapsedTime runtime = new ElapsedTime();
+    DcMotor motorLeft;
+    DcMotor motorRight;
 
-    final static double CIRCUMFERENCE = Math.PI * WHEEL_DIAMETER;
 
-    // Servo arm;
-  // double armDelta = 0.01;
-  // double armPosition;
 
-    @Override
+
     public void runOpMode() throws InterruptedException {
-    {
-        // arm = hardwareMap.servo.get("ServoArm");
-       // armPosition = 0;
-        // arm.setPosition(0);
-        motorRight = hardwareMap.dcMotor.get("motor_1");
-        motorLeft = hardwareMap.dcMotor.get("motor_2");
-        motorRight2 = hardwareMap.dcMotor.get("motor_3");
-        motorLeft2 = hardwareMap.dcMotor.get("motor_4");
-        motorRight3 = hardwareMap.dcMotor.get("motor_5");
-        motorLeft3 = hardwareMap.dcMotor.get("motor_6");
-        motorRight.setDirection(DcMotor.Direction.REVERSE);
-        motorRight2.setDirection(DcMotor.Direction.REVERSE);
-        motorLeft3.setDirection(DcMotor.Direction.REVERSE);
+        motorLeft=hardwareMap.dcMotor.get("motor_2");
+        motorRight=hardwareMap.dcMotor.get("motor_1");
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
 
-
+        motorLeft.setPower(15);
+        motorLeft.setTargetPosition(10);
 
         waitForStart();
-        double currentTime = getRuntime();
-        double endTime = currentTime + 50000;
-        while (getRuntime() < endTime) {
-            if (gamepad1.a) {
-                double  ROTATIONS = 4 / CIRCUMFERENCE;
-                double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
-                turn((int) counts);
-            }
+        runtime.reset();
 
-            if (gamepad1.x) {
-                double  ROTATIONS = 4 / CIRCUMFERENCE;
-                double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
-                move((int) counts);
-            }
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.update();
 
-            if (gamepad1.b) {
-                double  ROTATIONS = 2 / CIRCUMFERENCE;
-                double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
-                turn((int) counts);
-            }
+            // eg: Run wheels in tank mode (note: The joystick goes negative when pushed forwards)
+            // leftMotor.setPower(-gamepad1.l-+eft_stick_y);
+            // rightMotor.setPower(-gamepad1.right_stick_y);
 
-            if (gamepad1.y) {
-                double  ROTATIONS = 2 / CIRCUMFERENCE;
-                double counts = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
-                move((int) counts);            }
-
+            idle(); // Always call idle() at the bottom of your while(opModeIsActive()) loop
         }
-
-      //  leftMotor.setPowerFloat();
-       // rightMotor.setPowerFloat();
-        setMotorPower(0.0 ,0.0);
-
-    }
-  }
-    public void resetEncoders() {
-        motorLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        motorRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-    }
-
-    public boolean waitForResetEncoders() {
-        return motorLeft.getCurrentPosition() == 0 &&
-                motorRight.getCurrentPosition() == 0;
-    }
-
-    public void turn(int counts) {
-        resetEncoders();
-        while( !waitForResetEncoders() ) {
-            try {
-                sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        motorLeft.setTargetPosition((int)counts);
-        motorRight.setTargetPosition((int) -counts);
-        motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft2.setTargetPosition((int) counts);
-        motorRight2.setTargetPosition((int) -counts);
-        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft3.setTargetPosition((int)counts);
-        motorRight3.setTargetPosition((int) -counts);
-        motorLeft3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        setMotorPower(1.0, -1.0);
-    }
-    public void move(int counts) {
-        resetEncoders();
-        while( !waitForResetEncoders() ) {
-            try {
-                sleep(100);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        motorLeft.setTargetPosition((int)counts);
-        motorRight.setTargetPosition((int)counts);
-        motorLeft.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft2.setTargetPosition((int)counts);
-        motorRight2.setTargetPosition((int)counts);
-        motorLeft2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight2.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorLeft3.setTargetPosition((int)counts);
-        motorRight3.setTargetPosition((int)counts);
-        motorLeft3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        motorRight3.setChannelMode(DcMotorController.RunMode.RUN_TO_POSITION);
-        setMotorPower(1.0, 1.0);
-    }
-    public void setMotorPower(double rightPower,double leftPower){
-        motorLeft.setPower(leftPower);
-        motorRight.setPower(rightPower);
-        motorLeft2.setPower(leftPower);
-        motorRight2.setPower(rightPower);
-        motorLeft3.setPower(leftPower);
-        motorRight3.setPower(rightPower);
     }
 }

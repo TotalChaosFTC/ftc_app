@@ -42,7 +42,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 /**
  * A simple example of a linear op mode that shows how to change the I2C address.
  */
-public class ColorSensorOp extends LinearOpMode {
+/*public class ColorSensorOp extends LinearOpMode {
 
     public static final int ADDRESS_SET_NEW_I2C_ADDRESS = 0x70;
     // trigger bytes used to change I2C address on ModernRobotics sensors.
@@ -173,7 +173,7 @@ public class ColorSensorOp extends LinearOpMode {
         // to update the I2cAddress in the driver.
         //irSeeker.setI2cAddress(newAddress);
         /***************************/
-    }
+   /* }
 
     private boolean foundExpectedBytes(int[] byteArray, Lock lock, byte[] cache) {
         try {
@@ -215,3 +215,4 @@ public class ColorSensorOp extends LinearOpMode {
         }
     }
 }
+  */

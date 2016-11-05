@@ -45,7 +45,7 @@ import java.util.Vector;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class AutoOpLeague2 extends NewBaseAutoOp {
+/*public class AutoOpLeague2 extends NewBaseAutoOp {
 
 
 
@@ -71,6 +71,7 @@ public class AutoOpLeague2 extends NewBaseAutoOp {
 
     }
 }
+*/
 
 
 

@@ -32,7 +32,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
@@ -49,6 +52,7 @@ public class TankRoverOp extends OpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
+    DcMotor vortex;
     DcMotor rightBack;
     final static double FAST = 1.0;
     final static double MED_FAST = 0.75;
@@ -56,15 +60,32 @@ public class TankRoverOp extends OpMode {
     final static double SLOW = 0.25;
     double armMode = FAST;
     double mode = FAST;
+    CRServo pusherLeft;
+    CRServo pusherRight;
+    double pusherposition = 0.5;
+    ColorSensor beaconColorSensor;
+    ColorSensor bottomColorSensor;
+
+
+
+
+
 
     public void init()
     {
-        leftFront = hardwareMap.dcMotor.get("motor_1");
-        rightFront = hardwareMap.dcMotor.get("motor_2");
-        leftBack = hardwareMap.dcMotor.get("motor_3");
-        rightBack = hardwareMap.dcMotor.get("motor_4");
-        leftBack.setDirection(DcMotor.Direction.REVERSE);
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
+        leftFront = hardwareMap.dcMotor.get("lf");
+        rightFront = hardwareMap.dcMotor.get("rf");
+        leftBack = hardwareMap.dcMotor.get("lb");
+        rightBack = hardwareMap.dcMotor.get("rb");
+        vortex = hardwareMap.dcMotor.get("vtx");
+        rightBack.setDirection(DcMotor.Direction.REVERSE);
+        rightFront.setDirection(DcMotor.Direction.REVERSE);
+        beaconColorSensor = hardwareMap.colorSensor.get("beacon");
+        bottomColorSensor = hardwareMap.colorSensor.get("bottom");
+        pusherLeft = hardwareMap.crservo.get("pusherLeft");
+        pusherRight = hardwareMap.crservo.get("pusherRight");
+        pusherLeft.setPower(0);
+        pusherRight.setPower(0);
     }
 
     @Override
@@ -100,6 +121,7 @@ public class TankRoverOp extends OpMode {
 
 
 
+
         right = (double)scaleInput(right);
         left =  (double)scaleInput(left);
 
@@ -110,6 +132,62 @@ public class TankRoverOp extends OpMode {
         leftBack.setPower(left);
         rightFront.setPower(right);
         rightBack.setPower(right);
+
+
+        if (gamepad1.y){
+            vortex.setPower(50);
+        }
+        else {
+            vortex.setPower(0);
+        }
+
+        if (gamepad1.a){
+            vortex.setPower(-50);
+        }
+        else{
+            vortex.setPower(0);
+        }
+        if (gamepad2.x){
+            pusherposition = 1;
+            pusherposition = Range.clip(pusherposition, -1, 1);
+            pusherLeft.setPower(1);
+        }
+        else{
+            pusherposition = 0 ;
+            pusherposition = Range.clip(pusherposition, -1, 1);
+            pusherLeft.setPower(0);
+        }
+        if (gamepad2.b) {
+            pusherposition = -1;
+            pusherposition = Range.clip(pusherposition, -1, 1);
+            pusherLeft.setPower(-1);
+        }
+        else{
+            pusherposition = 0;
+            pusherposition = Range.clip(pusherposition, -1, 1);
+            pusherLeft.setPower(0);
+        }
+
+        if (gamepad2.y){
+            pusherposition = 1;
+            pusherposition = Range.clip(pusherposition, -1, 1);
+            pusherRight.setPower(1);
+        }
+        else{
+            pusherposition = 0 ;
+            pusherposition = Range.clip(pusherposition, -1, 1);
+            pusherRight.setPower(0);
+        }
+        if (gamepad2.a) {
+            pusherposition = -1;
+            pusherposition = Range.clip(pusherposition, -1, 1);
+            pusherRight.setPower(-1);
+        }
+        else{
+            pusherposition = 0;
+            pusherposition = Range.clip(pusherposition, -1, 1);
+            pusherRight.setPower(0);
+        }
 
     }
 

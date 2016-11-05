@@ -31,12 +31,14 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package com.qualcomm.ftcrobotcontroller.opmodes;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 /**
  * TeleOp Mode
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class BeaconPracticeOp extends NewBaseAutoOp {
+/*public class BeaconPracticeOp extends NewBaseAutoOp {
 
 
 
@@ -55,5 +57,5 @@ public class BeaconPracticeOp extends NewBaseAutoOp {
 }
 
 
-
+*/
 

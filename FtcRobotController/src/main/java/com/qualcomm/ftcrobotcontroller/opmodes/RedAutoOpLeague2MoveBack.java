@@ -43,7 +43,7 @@ import java.util.Vector;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class RedAutoOpLeague2MoveBack extends OpMode {
+/*public class RedAutoOpLeague2MoveBack extends OpMode {
     DcMotor leftFront;
     DcMotor rightFront;
     DcMotor leftBack;
@@ -201,7 +201,7 @@ public class RedAutoOpLeague2MoveBack extends OpMode {
     }
 
     public void resetEncoders() {
-        leftFront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        leftFront.(DcMotorController.RunMode.RESET_ENCODERS);
         rightFront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         leftBack.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         rightBack.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -235,4 +235,4 @@ public class RedAutoOpLeague2MoveBack extends OpMode {
     }
 }
 
-
+*/

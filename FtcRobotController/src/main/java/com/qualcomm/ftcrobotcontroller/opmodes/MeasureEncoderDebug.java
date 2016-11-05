@@ -40,7 +40,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class MeasureEncoderDebug extends OpMode {
+/*public class MeasureEncoderDebug extends OpMode {
     DcMotor motorRight;
     DcMotor motorLeft;
     DcMotor motorRight2;
@@ -164,3 +164,4 @@ public class MeasureEncoderDebug extends OpMode {
     }
 }
 
+*/

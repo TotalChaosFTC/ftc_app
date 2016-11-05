@@ -43,7 +43,7 @@ import java.util.Vector;
  * <p>
  *Enables control of the robot via the gamepad
  */
-public class CornerRedAutoOpLeague2 extends NewBaseAutoOp {
+/*public class CornerRedAutoOpLeague2 extends NewBaseAutoOp {
     @Override
     public void initSteps() {
         steps.add(new NewBaseAutoOp.Step(20, 0.25, 0.25, MOVE, BACKWARD));
@@ -60,3 +60,4 @@ public class CornerRedAutoOpLeague2 extends NewBaseAutoOp {
     }
 }
 
+*/
