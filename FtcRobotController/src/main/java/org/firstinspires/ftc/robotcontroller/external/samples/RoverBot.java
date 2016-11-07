@@ -76,7 +76,8 @@ public class RoverBot
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        beaconColorSensor.enableLed(false);
+        bottomColorSensor.enableLed(true);
 
         // Define and initialize ALL installed servos.
 
@@ -89,8 +90,15 @@ public class RoverBot
 
     }
 
-
-
+    public void setMotorPower (double leftPower, double rightPower){
+        backLeft.setPower(leftPower);
+        frontLeft.setPower(leftPower);
+        backRight.setPower(rightPower);
+        frontRight.setPower(rightPower);
+    }
+    public void stopMotors(){
+        setMotorPower(0,0);
+    }
     /***
      *
      * waitForTick implements a periodic delay. However, this acts like a metronome with a regular

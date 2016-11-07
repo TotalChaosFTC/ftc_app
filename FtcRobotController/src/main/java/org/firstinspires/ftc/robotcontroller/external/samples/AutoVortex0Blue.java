@@ -67,7 +67,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Autonomous(name="Pushbot: Auto Drive By Encoder", group="Pushbot")
 @Disabled
-public class AutoVortex0 extends LinearOpMode {
+public class AutoVortex0Blue extends LinearOpMode {
 
     /* Declare OpMode members. */
     RoverBot         robot   = new RoverBot();   // Use a Pushbot's hardware
@@ -78,8 +78,10 @@ public class AutoVortex0 extends LinearOpMode {
     static final double     WHEEL_DIAMETER_INCHES   = 3.8 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_INCHES * 3.1415);
-    double RED;
+    static final double RED = 0;
     double BLUE;
+    double WHITE;
+    double BLACK;
     long waitTime = 1000;
     @Override
     public void runOpMode() throws InterruptedException {
@@ -115,18 +117,33 @@ public class AutoVortex0 extends LinearOpMode {
         waitForStart();
 
         encoderDrive(0.25, 0.25, 4, 4);
-        encoderDrive(0.25, -0.25, 7, -7);
+        encoderDrive(-0.25, 0.25, -7, 7);
         encoderDrive(0.25,0.25, 51.5, 51.5);
-        encoderDrive(-0.25,0.25, 11, -11);
+        encoderDrive(0.25,-0.25, -7.5, 7.5);
         encoderDrive(0.25,0.25, 24, 24);
-        colorSensorDrive(RED,0);
+        colorSensorDrive(BLUE,0);
+        encoderDrive(-0.25,-0.25, -32, -32);
+        encoderDrive(0.25,-0.25, 17, -17);
+        encoderDrive(0.25,0.25, 46,46);
+        encoderDrive(-0.25,0.25, -16.5, 16.5);
+        encoderDrive(0.25,0.25,30, 30);
+        colorSensorDrive(BLUE,0);
+        sleep(1000);
+
+        /*encoderDrive(0.25, 0.25, 2, 2);
+        encoderDrive(0.25, -0.25, 7, -7);
+        encoderDrive(0.25,0.25, 55, 55);
+        encoderDrive(-0.25,0.25, 7.5, -7.5);
+        encoderDrive(0.25,0.25, 22, 22);
+        colorSensorDrive(BLUE,0);
         encoderDrive(-0.25,-0.25, -32, -32);
         encoderDrive(-0.25,0.25, -17, 17);
         encoderDrive(0.25,0.25, 46,46);
         encoderDrive(0.25,-0.25, 16.5, -16.5);
         encoderDrive(0.25,0.25,30, 30);
-        colorSensorDrive(RED,0);
-        sleep(1000);
+        colorSensorDrive(BLUE,0);
+        sleep(1000); */
+
 
 
 
@@ -174,11 +191,7 @@ public class AutoVortex0 extends LinearOpMode {
 
             // reset the timeout time and start motion.
             runtime.reset();
-            robot.frontLeft.setPower(leftSpeed);
-            robot.backLeft.setPower(leftSpeed);
-            robot.frontRight.setPower(rightSpeed);
-            robot.backRight.setPower(rightSpeed);
-
+            robot.setMotorPower(leftSpeed, rightSpeed);
             // keep looping while we are still active, and there is time left, and both motors are running.
             while (opModeIsActive() &&
 
@@ -196,10 +209,7 @@ public class AutoVortex0 extends LinearOpMode {
             }
 
             // Stop all motion;
-            robot.frontLeft.setPower(0);
-            robot.frontRight.setPower(0);
-            robot.backLeft.setPower(0);
-            robot.backRight.setPower(0);
+            robot.stopMotors();
 
             // Turn off RUN_TO_POSITION
             robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -210,42 +220,71 @@ public class AutoVortex0 extends LinearOpMode {
             //  sleep(250);   // optional pause after each move
         }
     }
+
     public void colorSensorDrive(double color, double colorSpeed) throws InterruptedException {
-        robot.frontLeft.setPower(colorSpeed);
-        robot.frontRight.setPower(colorSpeed);
-        robot.backLeft.setPower(colorSpeed);
-        robot.backRight.setPower(colorSpeed);
-        if (color == RED) {
-            if (robot.beaconColorSensor.red() == 2);
-            robot.frontLeft.setPower(0);
-            robot.frontRight.setPower(0);
-            robot.backLeft.setPower(0);
-            robot.backRight.setPower(0);
-            robot.pusherRight.setPower(1);
-            sleep(1000);
-            robot.pusherRight.setPower(-1);
-            sleep(1000);
-            robot.pusherRight.setPower(0);
-            telemetry.addData("Red Value", robot.beaconColorSensor.red());
-            telemetry.update();
-        }
 
-        else{
-            if (robot.beaconColorSensor.blue() == 2);
-            robot.frontLeft.setPower(0);
-            robot.frontRight.setPower(0);
-            robot.backLeft.setPower(0);
-            robot.backRight.setPower(0);
-            robot.pusherLeft.setPower(1);
-            sleep(1000);
-            robot.pusherLeft.setPower(-1);
-            sleep(1000);
-            robot.pusherLeft.setPower(0);
-            telemetry.addData("Blue Value", robot.beaconColorSensor.blue());
-            telemetry.update();
+        robot.setMotorPower(colorSpeed,colorSpeed);
+        if (color == BLUE) {
+
+            if (robot.beaconColorSensor.blue() >= 2) {
+                robot.stopMotors();
+                robot.pusherRight.setPower(1);
+                sleep(1000);
+                robot.pusherRight.setPower(-1);
+                sleep(1000);
+                robot.pusherRight.setPower(0);
+                telemetry.addData("Red Value", robot.beaconColorSensor.red());
+                telemetry.update();
+            }
+            else if (robot.beaconColorSensor.red() >= 2) {
+                    robot.stopMotors();
+                    robot.pusherLeft.setPower(1);
+                    sleep(1000);
+                    robot.pusherLeft.setPower(-1);
+                    sleep(1000);
+                    robot.pusherLeft.setPower(0);
+                    telemetry.addData("Blue Value", robot.beaconColorSensor.blue());
+                    telemetry.update();
+            }
+            else {
+                telemetry.addData("Blue Value", robot.beaconColorSensor.blue());
+                telemetry.update();
+            }
 
         }
+    }
+    public void lineFollow (double followSpeed){
+        if(robot.bottomColorSensor.argb() == 16){
+            if (reachedTheBeacon()){
+                robot.stopMotors();
+            }
+            else{
+                robot.setMotorPower(0.5, 0.75);
+            }
+
+        }
+        if (robot.bottomColorSensor.argb() == 0){
+            if (reachedTheBeacon()){
+
+                robot.stopMotors();
+
+            }
+            else{
+                robot.setMotorPower(0.5, 0.75);
+            }
+
+        }
+
 
     }
+    public boolean reachedTheBeacon(){
+        if (robot.beaconColorSensor.blue() < 2 && robot.beaconColorSensor.red() < 2){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
 
 }
