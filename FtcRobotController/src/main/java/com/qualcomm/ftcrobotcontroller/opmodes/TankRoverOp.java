@@ -116,8 +116,8 @@ public class TankRoverOp extends OpMode {
 
         // when leftstick is pushed up move forward
         //when rightstick is pushed down move backwards
-        double left = gamepad1.left_stick_y;
-        double right= gamepad1.right_stick_y;
+        double left = -gamepad1.left_stick_y;
+        double right= -gamepad1.right_stick_y;
 
 
 

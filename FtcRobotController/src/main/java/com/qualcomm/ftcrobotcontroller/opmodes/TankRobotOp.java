@@ -63,9 +63,9 @@ public class TankRobotOp extends OpMode {
     DcMotor rightFront;
     DcMotor leftBack;
     DcMotor rightBack;
-    DcMotor armTwist;
-    DcMotor armLift;
-    DcMotor frontSweeper;
+    DcMotor leftShooter;
+    DcMotor rightShooter;
+    DcMotor ballCollect;
     DcMotor winch;
     Servo buttonFlap;
     Servo sensorSlide;
@@ -86,12 +86,13 @@ public class TankRobotOp extends OpMode {
     {
 
 
+        leftFront = hardwareMap.dcMotor.get("motor_1");
         rightFront = hardwareMap.dcMotor.get("motor_2");
         leftBack = hardwareMap.dcMotor.get("motor_3");
         rightBack = hardwareMap.dcMotor.get("motor_4");
-        armTwist = hardwareMap.dcMotor.get("motor_5");
-        armLift = hardwareMap.dcMotor.get("motor_6");
-        frontSweeper = hardwareMap.dcMotor.get("motor_7");
+        leftShooter = hardwareMap.dcMotor.get("motor_5");
+        rightShooter = hardwareMap.dcMotor.get("motor_6");
+        ballCollect = hardwareMap.dcMotor.get("motor_7");
         clickerLeft = hardwareMap.servo.get("servo1");
         clickerRight = hardwareMap.servo.get("servo2");
         buttonFlap = hardwareMap.servo.get("servo3");
@@ -101,7 +102,6 @@ public class TankRobotOp extends OpMode {
         leftBack.setDirection(DcMotor.Direction.REVERSE);
         leftFront.setDirection(DcMotor.Direction.REVERSE);
         clickerLeft.setDirection(Servo.Direction.REVERSE);
-        armLift.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
@@ -226,15 +226,6 @@ public class TankRobotOp extends OpMode {
             winch.setPower(winchPower);
         }
         else if (gamepad2.a) {
-
-
-
-
-
-
-
-
-
             winchPower = -1;
             winchPower = Range.clip(winchPower, -winchMode, winchMode);
             winch.setPower(winchPower);
@@ -246,19 +237,13 @@ public class TankRobotOp extends OpMode {
 
 
 
-        if (gamepad1.left_trigger > 0){
-            sweeper = -gamepad1.left_trigger;
-            sweeper = Range.clip(sweeper, -1, 1);
-            frontSweeper.setPower(sweeper);
+        if (gamepad1.left_bumper){
+            ballCollect.setPower(sweeper);
         }
         else if (gamepad1.right_trigger > 0){
-            sweeper = gamepad1.right_trigger;
-            sweeper = Range.clip(sweeper, -1, 1);
-            frontSweeper.setPower(sweeper);
+            ballCollect.setPower(0);
         }
-        else {
-            frontSweeper.setPower(0);
-        }
+
 
 
 
